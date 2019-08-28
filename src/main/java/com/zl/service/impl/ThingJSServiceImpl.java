@@ -37,7 +37,7 @@ public class ThingJSServiceImpl implements ThingJSService {
     }
 
     @Override
-    public List<Things> thingList() {
-        return thingJSMapper.thingList();
+    public List<Things> thingList(Integer stationId) {
+        return thingJSMapper.thingList(stationId);
     }
 }
