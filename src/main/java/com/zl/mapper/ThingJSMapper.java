@@ -22,7 +22,7 @@ public interface ThingJSMapper {
     @Select("select * from stationinfo where stationId=#{stationId}")
     Station oneStation(int stationId);
 
-    @Select("select * from thingsinfo where StationId=#{stationId}")
-    List<Things> thingList(int stationId);
+    @Select("select * from thingsinfo")
+    List<Things> thingList();
 
 }

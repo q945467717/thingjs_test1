@@ -115,12 +115,12 @@ public class ThingJSController {
     }
 
     @RequestMapping("/thingInfo")
-    public List<Things> thingInfo(HttpServletResponse response,@RequestParam("stationId") int stationId){
+    public List<Things> thingInfo(HttpServletResponse response){
 
         response.setHeader("Access-Control-Allow-Origin","*");
         response.setHeader("Access-Control-Allow-Credentials","true");
 
-        return thingJSService.thingList(stationId);
+        return thingJSService.thingList();
     }
 
 }

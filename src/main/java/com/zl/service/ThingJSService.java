@@ -16,6 +16,6 @@ public interface ThingJSService {
 
     Station oneStation(int stationId);
 
-    List<Things> thingList(int stationId);
+    List<Things> thingList();
 
 }

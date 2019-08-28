@@ -330,23 +330,6 @@ public class AdminController {
             return "请输入修改的信息";
         }
 
-
-//        if(newStationName!=null&&newStationName.length()!=0) {
-//            if (newStationUrl != null && newStationUrl.length() != 0) {
-//                stationService.updateStation(stationId,newStationName,newStationUrl);
-//                return "修改站点信息成功";
-//            } else {
-//                Station station = stationService.oneStation(stationId);
-//                System.out.println(station);
-//                stationService.updateStation(stationId, newStationName, station.getSceneId());
-//                return "修改站点信息成功";
-//            }
-//        }else if(newStationUrl != null && newStationUrl.length() != 0){
-//            Station station = stationService.oneStation(stationId);
-//            stationService.updateStation(stationId, station.getStationName(), newStationUrl);
-//            return "修改站点信息成功";
-//        }
-//        return "请输入站点名称或Url";
     }
 
     /**
