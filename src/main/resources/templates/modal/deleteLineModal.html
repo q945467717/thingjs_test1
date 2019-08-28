@@ -1,0 +1,33 @@
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">删除路线</h4>
+        </div>
+        <div class="modal-body">确定要删除该条线路吗？</div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" th:id="${id}" class="btn btn-primary" onclick="lineDelete(this.id)" >确定</button>
+        </div>
+    </div>
+</div>
+</html>
+
+<script>
+    function lineDelete(id) {
+            $.ajax({
+                // contentType: 'application/json;charset=UTF-8',
+                url: "/admin/DeleteLine",
+                data: {'lineName': id},
+                type: "POST",
+                dataType: "text",
+                success: function (data) {
+                    alert(data);
+                    $('#deleteLineModal').modal('hide')
+                },
+                error: function () {
+                }
+            });
+    }
+</script>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
+    <script>
+    $(document).ready(function () {
+
+        $("#button").click(function () {
+           var machineId = $("#machineId").val();
+           var cardId = $("#cardId").val();
+            $.ajax({
+               // contentType: 'application/json;charset=UTF-8',
+                url:"http://localhost:8080/thingJS/doorSimulation",
+                data:{'cardId':cardId,'machineId':machineId},
+                type:"POST",
+                dataType:"text",
+                success:function (data) {
+                    document.getElementById("result").innerText = data
+                }
+            })
+        })
+    })
+    </script>>
+</head>
+machineId:<input type="text" id="machineId"/>
+cardId:<input type="text" id="cardId"/>
+<button id="button">提交</button>
+<div id="result"></div>
+</body>
+</html>

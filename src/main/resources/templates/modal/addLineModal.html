@@ -1,0 +1,35 @@
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">新增线路</h4>
+        </div>
+        <div class="modal-body" style="width: 300px">请输入线路名称：<input type="text" id="lineName" /></div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-primary" onclick="addLine()" >确定新增</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function addLine() {
+        var lineName = $("#lineName").val();
+        $.ajax({
+            // contentType: 'application/json;charset=UTF-8',
+            url:"/admin/AddLine",
+            data:{'lineName':lineName},
+            type:"POST",
+            dataType:"text",
+            success:function (data) {
+                alert(data);
+                $('#lineModal').modal('hide')
+            },
+            error:function () {
+                alert("线路已存在");
+                $('#lineModal').modal('hide')
+            }
+        })
+    }
+</script>

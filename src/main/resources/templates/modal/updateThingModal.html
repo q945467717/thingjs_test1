@@ -1,0 +1,45 @@
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="newName">新名称</h4>
+        </div>
+        <div class="modal-body" style="width: 200px"><span >新物体ID：<input type="text" id="tid" /></span></div>
+        <div class="modal-body" style="width: 200px"><span >新物体名称：<input type="text" id="tname" /></span></div>
+        <div class="modal-body" style="width: 200px"><span >新楼层：<input type="text" id="tposition" /></span></div>
+        <div class="modal-body" style="width: 200px"><span >新物体分组：<input type="text" id="tgroup" /></span></div>
+        <div class="modal-body" style="width: 200px"><span >新监控：<input type="text" id="tcamera" /></span></div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" th:id="${id}" class="btn btn-primary" onclick="updateThing(this.id)" >确定修改</button>
+        </div>
+    </div>
+</div>
+</html>
+
+<script>
+
+    function updateThing(id) {
+
+        var tid = $("#tid").val();
+        var tname = $("#tname").val();
+        var tposition = $("#tposition").val();
+        var tgroup = $("#tgroup").val();
+        var tcamera = $("#tcamera").val();
+
+
+        $.ajax({
+            // contentType: 'application/json;charset=UTF-8',
+            url:"/admin/UpdateThing",
+            data:{'tid':tid,"tname":tname,"tposition":tposition,"tgroup":tgroup,"tcamera":tcamera,"id":id},
+            type:"POST",
+            dataType:"text",
+            success:function (data) {
+                alert(data);
+                $('#updateThingModal').modal('hide')
+
+            },
+        })
+    }
+</script>

@@ -1,0 +1,38 @@
+
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="stationName">新站点</h4>
+        </div>
+        <div class="modal-body" style="width: 300px">请输入站点名称：<input type="text" id="newStationName"/></div>
+        <div class="modal-body" style="width: 300px">请输入场景Url：<input type="text" id="newSceneUrl"/></div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" th:id="${id}" class="btn btn-primary" onclick="addStation(this.id)">确定添加</button>
+        </div>
+    </div>
+</div>
+</html>
+
+<script>
+    function addStation(id) {
+        var stationName = $("#newStationName").val();
+        var sceneUrl = $("#newSceneUrl").val();
+        $.ajax({
+            // contentType: 'application/json;charset=UTF-8',
+            url:"/admin/AddStation",
+            data:{"lineName":id,"stationName":stationName,"sceneUrl":sceneUrl},
+            type:"POST",
+            dataType:"text",
+            success:function (data) {
+                alert(data);
+                $('#addStationModal').modal('hide')
+            }
+        })
+
+
+    }
+
+</script>
