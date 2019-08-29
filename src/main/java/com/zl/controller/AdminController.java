@@ -77,14 +77,18 @@ public class AdminController {
     }
     //去修改站点名称模态框
     @RequestMapping("/toUpdateStation")
-    public String toUpdateStation(String id, Model model){
-        model.addAttribute("id",id);
+    public String toUpdateStation(int id, Model model){
+       // model.addAttribute("id",id);
+        Station station = stationService.oneStation(id);
+        model.addAttribute("station",station);
         return "modal/updateStationModal";
     }
     //去修改物体名称模态框
     @RequestMapping("/toUpdateThing")
     public String toUpdateThing(int id, Model model){
-        model.addAttribute("id",id);
+      //  model.addAttribute("id",id);
+        Things thing = thingsService.oneThing(id);
+        model.addAttribute("thing",thing);
         return "modal/updateThingModal";
     }
     //去删除线路模态框
@@ -154,23 +158,8 @@ public class AdminController {
     @ResponseBody
     @RequestMapping("/UpdateStation")
     public String updateStation(int stationId,String newStationName,String newStationUrl){
-
-        if(newStationName!=null&&newStationName.length()!=0) {
-            if (newStationUrl != null && newStationUrl.length() != 0) {
-                stationService.updateStation(stationId,newStationName,newStationUrl);
-                return "修改站点信息成功";
-            } else {
-                Station station = stationService.oneStation(stationId);
-                System.out.println(station);
-                stationService.updateStation(stationId, newStationName, station.getSceneId());
-                return "修改站点信息成功";
-            }
-        }else if(newStationUrl != null && newStationUrl.length() != 0){
-            Station station = stationService.oneStation(stationId);
-            stationService.updateStation(stationId, station.getStationName(), newStationUrl);
-            return "修改站点信息成功";
-        }
-            return "请输入站点名称或Url";
+        stationService.updateStation(stationId,newStationName,newStationUrl);
+        return "修改站点信息成功";
     }
     /**
      * 修改物体名称接口
@@ -178,163 +167,8 @@ public class AdminController {
     @ResponseBody
     @RequestMapping("/UpdateThing")
     public String updateThing(int id,String tname,String tposition,String tid,String tgroup,String tcamera){
-
-        if(tname!=null&&tname.length()!=0) {
-            if(tposition!=null&&tposition.length()!=0) {
-                if (tid != null && tid.length() != 0) {
-                    if (tgroup != null && tgroup.length() != 0) {
-                        if (tcamera != null && tcamera.length() != 0) {
-                            thingsService.updateThing(id,tname,tposition,tid,tgroup,tcamera);
-                            return "修改物体信息成功";
-                        }else {
-                            Things things = thingsService.oneThing(id);
-                            thingsService.updateThing(id,tname,tposition,tid,tgroup,things.getTcamera());
-                            return "修改物体信息成功";
-                        }
-                    }else if(tcamera != null && tcamera.length() != 0){
-                        Things things = thingsService.oneThing(id);
-                        thingsService.updateThing(id,tname,tposition,tid,things.getTgroup(),tcamera);
-                        return "修改物体信息成功";
-                    }else{
-                        Things things = thingsService.oneThing(id);
-                        thingsService.updateThing(id,tname,tposition,tid,things.getTgroup(),things.getTcamera());
-                        return "修改物体信息成功";
-                    }
-                }else if(tgroup != null && tgroup.length() != 0){
-                    if(tcamera != null && tcamera.length() != 0){
-                        Things things = thingsService.oneThing(id);
-                        thingsService.updateThing(id,tname,tposition,things.getTid(),tgroup,tcamera);
-                        return "修改物体信息成功";
-                    }else {
-                        Things things = thingsService.oneThing(id);
-                        thingsService.updateThing(id,tname,tposition,things.getTid(),tgroup,things.getTcamera());
-                        return "修改物体信息成功";
-                    }
-                }else if(tcamera != null && tcamera.length() != 0){
-                    Things things = thingsService.oneThing(id);
-                    thingsService.updateThing(id,tname,tposition,things.getTid(),things.getTgroup(),tcamera);
-                    return "修改物体信息成功";
-                }else {
-                    Things things = thingsService.oneThing(id);
-                    thingsService.updateThing(id,tname,tposition,things.getTid(),things.getTgroup(),things.getTcamera());
-                    return "修改物体信息成功";
-                }
-            }else if(tid != null && tid.length() != 0){
-                if(tgroup != null && tgroup.length() != 0){
-                    if(tcamera != null && tcamera.length() != 0){
-                        Things things = thingsService.oneThing(id);
-                        thingsService.updateThing(id,tname,things.getTposition(),tid,tgroup,tcamera);
-                        return "修改物体信息成功";
-                    }else {
-                        Things things = thingsService.oneThing(id);
-                        thingsService.updateThing(id,tname,things.getTposition(),tid,tgroup,things.getTcamera());
-                        return "修改物体信息成功";
-                    }
-                }else if(tcamera != null && tcamera.length() != 0){
-                    Things things = thingsService.oneThing(id);
-                    thingsService.updateThing(id,tname,things.getTposition(),tid,things.getTgroup(),tcamera);
-                    return "修改物体信息成功";
-                }else {
-                    Things things = thingsService.oneThing(id);
-                    thingsService.updateThing(id,tname,things.getTposition(),tid,things.getTgroup(),things.getTcamera());
-                    return "修改物体信息成功";
-                }
-            }else if(tgroup != null && tgroup.length() != 0){
-                if(tcamera != null && tcamera.length() != 0){
-                    Things things = thingsService.oneThing(id);
-                    thingsService.updateThing(id,tname,things.getTposition(),things.getTid(),tgroup,tcamera);
-                    return "修改物体信息成功";
-                }else {
-                    Things things = thingsService.oneThing(id);
-                    thingsService.updateThing(id,tname,things.getTposition(),things.getTid(),tgroup,things.getTcamera());
-                    return "修改物体信息成功";
-                }
-            }else if(tcamera != null && tcamera.length() != 0){
-                Things things = thingsService.oneThing(id);
-                thingsService.updateThing(id,tname,things.getTposition(),things.getTid(),things.getTgroup(),tcamera);
-                return "修改物体信息成功";
-            }else {
-                Things things = thingsService.oneThing(id);
-                thingsService.updateThing(id,tname,things.getTposition(),things.getTid(),things.getTgroup(),things.getTcamera());
-                return "修改物体信息成功";
-            }
-        }else if(tposition!=null&&tposition.length()!=0){
-            if(tid != null && tid.length() != 0){
-                if(tgroup != null && tgroup.length() != 0){
-                    if(tcamera != null && tcamera.length() != 0){
-                        Things things = thingsService.oneThing(id);
-                        thingsService.updateThing(id,things.getTname(),tposition,tid,tgroup,tcamera);
-                        return "修改物体信息成功";
-                    }else {
-                        Things things = thingsService.oneThing(id);
-                        thingsService.updateThing(id,things.getTname(),tposition,tid,tgroup,things.getTcamera());
-                        return "修改物体信息成功";
-                    }
-                }else if(tcamera != null && tcamera.length() != 0){
-                    Things things = thingsService.oneThing(id);
-                    thingsService.updateThing(id,things.getTname(),tposition,tid,things.getTgroup(),tcamera);
-                    return "修改物体信息成功";
-                }else {
-                    Things things = thingsService.oneThing(id);
-                    thingsService.updateThing(id,things.getTname(),tposition,tid,things.getTgroup(),things.getTcamera());
-                    return "修改物体信息成功";
-                }
-            }else  if(tgroup != null && tgroup.length() != 0){
-                if(tcamera != null && tcamera.length() != 0){
-                    Things things = thingsService.oneThing(id);
-                    thingsService.updateThing(id,things.getTname(),tposition,things.getTid(),tgroup,tcamera);
-                    return "修改物体信息成功";
-                }else {
-                    Things things = thingsService.oneThing(id);
-                    thingsService.updateThing(id,things.getTname(),tposition,things.getTid(),tgroup,things.getTcamera());
-                    return "修改物体信息成功";
-                }
-            }else if(tcamera != null && tcamera.length() != 0){
-                Things things = thingsService.oneThing(id);
-                thingsService.updateThing(id,things.getTname(),tposition,things.getTid(),things.getTgroup(),tcamera);
-                return "修改物体信息成功";
-            }else {
-                Things things = thingsService.oneThing(id);
-                thingsService.updateThing(id,things.getTname(),tposition,things.getTid(),things.getTgroup(),things.getTcamera());
-                return "修改物体信息成功";
-            }
-        }else if(tid != null && tid.length() != 0){
-            if(tgroup != null && tgroup.length() != 0){
-                if(tcamera != null && tcamera.length() != 0){
-                    Things things = thingsService.oneThing(id);
-                    thingsService.updateThing(id,things.getTname(),things.getTposition(),tid,tgroup,tcamera);
-                    return "修改物体信息成功";
-                }else {
-                    Things things = thingsService.oneThing(id);
-                    thingsService.updateThing(id,things.getTname(),things.getTposition(),tid,tgroup,things.getTcamera());
-                    return "修改物体信息成功";
-                }
-            }else if(tcamera != null && tcamera.length() != 0){
-                Things things = thingsService.oneThing(id);
-                thingsService.updateThing(id,things.getTname(),things.getTposition(),tid,things.getTgroup(),tcamera);
-                return "修改物体信息成功";
-            }else {
-                Things things = thingsService.oneThing(id);
-                thingsService.updateThing(id,things.getTname(),things.getTposition(),tid,things.getTgroup(),things.getTcamera());
-                return "修改物体信息成功";
-            }
-        }else if(tgroup != null && tgroup.length() != 0){
-            if(tcamera != null && tcamera.length() != 0){
-                Things things = thingsService.oneThing(id);
-                thingsService.updateThing(id,things.getTname(),things.getTposition(),things.getTid(),tgroup,tcamera);
-                return "修改物体信息成功";
-            }else {
-                Things things = thingsService.oneThing(id);
-                thingsService.updateThing(id,things.getTname(),things.getTposition(),things.getTid(),tgroup,things.getTcamera());
-                return "修改物体信息成功";
-            }
-        }else if(tcamera != null && tcamera.length() != 0){
-            Things things = thingsService.oneThing(id);
-            thingsService.updateThing(id,things.getTname(),things.getTposition(),things.getTid(),things.getTgroup(),tcamera);
-            return "修改物体信息成功";
-        }else {
-            return "请输入修改的信息";
-        }
+        thingsService.updateThing(id,tname,tposition,tid,tgroup,tcamera);
+        return "修改物体信息成功";
 
     }
 

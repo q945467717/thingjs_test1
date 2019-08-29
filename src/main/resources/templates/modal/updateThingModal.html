@@ -5,14 +5,21 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title" id="newName">新名称</h4>
         </div>
-        <div class="modal-body" style="width: 200px"><span >新物体ID：<input type="text" id="tid" /></span></div>
-        <div class="modal-body" style="width: 200px"><span >新物体名称：<input type="text" id="tname" /></span></div>
-        <div class="modal-body" style="width: 200px"><span >新楼层：<input type="text" id="tposition" /></span></div>
-        <div class="modal-body" style="width: 200px"><span >新物体分组：<input type="text" id="tgroup" /></span></div>
-        <div class="modal-body" style="width: 200px"><span >新监控：<input type="text" id="tcamera" /></span></div>
+        <div class="modal-body" style="width: 200px"><span >新物体ID：<input type="text" id="tid" th:value="${thing.tid}"/></span></div>
+        <div class="modal-body" style="width: 200px"><span >新物体名称：<input type="text" id="tname" th:value="${thing.tname}"/></span></div>
+        <div class="modal-body" style="width: 200px"><span >新楼层：<input type="text" id="tposition" th:value="${thing.tposition}"/></span></div>
+        <div class="modal-body" style="width: 200px"><span >新监控：<input type="text" id="tcamera" th:value="${thing.tcamera}"/></span></div>
+        <div class="modal-body" style="width: 200px"><span >新物体分组：<select id="Group"  style="width: 172px;height: 25px">
+                                                                            <option value="camera" >摄像头</option>
+                                                                            <option value="door">闸机</option>
+                                                                            <option value="securitycheck">安检机</option>
+                                                                            <option value="sellticket">售票亭</option>
+                                                                            <option value="entrance">出入口</option>
+                                                                            <option th:text="${thing.tgroup}" th:selected="selected"></option>
+                                                                      </select></span></div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            <button type="button" th:id="${id}" class="btn btn-primary" onclick="updateThing(this.id)" >确定修改</button>
+            <button type="button" th:id="${thing.id}" class="btn btn-primary" onclick="updateThing(this.id)" >确定修改</button>
         </div>
     </div>
 </div>
@@ -21,11 +28,14 @@
 <script>
 
     function updateThing(id) {
+        var obj = document.getElementById('Group');
+        var index = obj.selectedIndex;
+        var tgroup = obj.options[index].text;
 
         var tid = $("#tid").val();
         var tname = $("#tname").val();
         var tposition = $("#tposition").val();
-        var tgroup = $("#tgroup").val();
+       // var tgroup = $("#tgroup").val();
         var tcamera = $("#tcamera").val();
 
 

@@ -5,11 +5,11 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title" id="newName">新名称</h4>
         </div>
-        <div class="modal-body" style="width: 300px">请输入新名称：<input type="text" id="newStationName"/></div>
-        <div class="modal-body" style="width: 300px">请输入新Url：<input type="text" id="newStationUrl"/></div>
+        <div class="modal-body" style="width: 300px">请输入新名称：<input type="text" id="newStationName" th:value="${station.stationName}"/></div>
+        <div class="modal-body" style="width: 300px">请输入新Url：<input type="text" id="newStationUrl" th:value="${station.sceneId}"/></div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            <button type="button" th:id="${id}" class="btn btn-primary" onclick="updateStation(this.id)" >确定修改</button>
+            <button type="button" th:id="${station.stationId}" class="btn btn-primary" onclick="updateStation(this.id)" >确定修改</button>
         </div>
     </div>
 </div>

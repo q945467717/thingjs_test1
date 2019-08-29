@@ -8,13 +8,14 @@
         <div class="modal-body" style="width: 200px"><span >物体ID：<input type="text" id="ThingsId" /></span></div>
         <div class="modal-body" style="width: 200px"><span >物体名称：<input type="text" id="Name" /></span></div>
         <div class="modal-body" style="width: 200px"><span >所在楼层：<input type="text" id="Position" /></span></div>
-        <div class="modal-body" style="width: 200px"><span >物体分组：<input type="text" id="Group" /></span></div>
         <div class="modal-body" style="width: 200px"><span >监控：<input type="text" id="Camera" /></span></div>
-
-<!--        物体名称：<input type="text" id="Name" />-->
-<!--            所在楼层：<input type="text" id="Position" />-->
-<!--            物体分组：<input type="text" id="Group" />-->
-<!--            监控：<input type="text" id="Camera" /></div>-->
+        <div class="modal-body" style="width: 200px"><span >物体分组：<select id="Group" style="width: 172px;height: 25px">
+                                                                            <option value="camera">摄像头</option>
+                                                                            <option value="door">闸机</option>
+                                                                            <option value="securitycheck">安检机</option>
+                                                                            <option value="sellticket">售票亭</option>
+                                                                            <option value="entrance">出入口</option>
+                                                                      </select></span></div>
 
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -28,9 +29,12 @@
     function addThing(id) {
 
         var tid = $("#ThingsId").val();
+        var obj = document.getElementById('Group');
+        var index = obj.selectedIndex;
+        var tgroup = obj.options[index].text;
         var tname = $("#Name").val();
         var tposition = $("#Position").val();
-        var tgroup = $("#Group").val();
+       // var tgroup = $("#Group").val();
         var tcamera = $("#Camera").val();
 
         $.ajax({
