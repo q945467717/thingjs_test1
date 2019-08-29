@@ -22,14 +22,10 @@ function openModal(url, modalId,id) {
  * @param modalId
  */
 function registerEvent(modalId){
+
         $("#"+modalId).on("hidden.bs.modal",function(){
-
-            if(modalId==="addStationModal"||modalId==="updateLineModal"||modalId==="updateStationModal"||modalId==="lineModal"||modalId==="deleteLineModal"||modalId==="deleteStationModal"){
-
-                location.href="/admin/lineManage";
-            }
 
         });
 
-    }
+}
 

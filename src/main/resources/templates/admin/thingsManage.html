@@ -9,7 +9,7 @@
         if (r != null) return (r[2]); return null;
     }
 
-    $(document).ready(function () {
+    $(document).ready(function s() {
         var id = getUrlParam('id');
         $("input:button").click(function() {
             $(this).prev("div").attr("id",id);
@@ -34,6 +34,7 @@
                 document.getElementById("detail").innerHTML = html;
             }
         });
+        var timer = setTimeout(s,2000);
     });
 
     function ckAll(){

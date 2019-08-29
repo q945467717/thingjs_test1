@@ -25,9 +25,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     UserDetailsService customUserService() {
         return new CustomUserService();
     }
-
-
-
     /**
      * 配置静态资源部被Security拦截
      *
@@ -35,7 +32,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/static/**","/","/toRegister","/checkLoginName");
+        web.ignoring().antMatchers("/static/**","/","/toRegister");
     }
 
     @Override
