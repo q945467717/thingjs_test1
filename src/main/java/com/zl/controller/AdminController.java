@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -103,6 +104,11 @@ public class AdminController {
     public String toDeleteThing(int id, Model model){
         model.addAttribute("id",id);
         return "modal/deleteThingModal";
+    }
+    //去批量删除
+    @RequestMapping("/toDeleteAll")
+    public String toDeleteAll(){
+        return "modal/deleteAllModal";
     }
     //去新增线路模态框
     @RequestMapping("/toAddLine")
@@ -365,6 +371,15 @@ public class AdminController {
     public String deleteThing(Integer id){
 
         thingsService.deleteThing(id);
+        return "删除物体成功";
+    }
+    @ResponseBody
+    @RequestMapping("/deleteAll")
+    public String deleteAll(@RequestParam("checks[]") int[] checks){
+
+        for(int i=0;i<checks.length;i++){
+            thingsService.deleteThing(checks[i]);
+        }
         return "删除物体成功";
     }
     /**
