@@ -46,10 +46,11 @@
             type:"POST",
             dataType:"text",
             success:function (data) {
-                alert(data);
-                $('#updateThingModal').modal('hide')
 
-            },
+                 alert(data);
+                $('#updateThingModal').modal('hide')
+                window.location.reload();
+            }
         })
     }
 </script>

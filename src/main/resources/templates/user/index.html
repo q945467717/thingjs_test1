@@ -12,32 +12,35 @@
         }
     </style>
     <title>地铁线路图</title>
-    <script th:src="@{/static/js/jquery-3.4.1.min.js}"></script>
-    <script src="https://webapi.amap.com/maps?v=1.4.15&key=565f4428b3187dfafb7274ddcfa50eb8"></script>
-    <script>
-        $(document).ready(function () {
-            var map = new AMap.Map('container', {
-                zoom:11
-            });
-            map.setMapStyle('amap://styles/4495319745976b5be5b1e0ad3f18ed11');
-            map.setCity("成都市");
-
-            var circle = new AMap.Circle({
-                map:map,
-                center:[104.066143,30.605106],
-                radius:50,
-                fillOpacity:0,
-                strokeOpacity:0
-            });
-
-            circle.on('click',function f() {
-                location.href="https://www.thingjs.com/s/7ac09657392d26dd657c1d82";            })
-        });
-
-    </script>
+<!--    <script th:src="@{/static/js/jquery-3.4.1.min.js}"></script>-->
 
 </head>
 <body>
 <div id="container" tabindex="0"></div>
+<script src="https://webapi.amap.com/maps?v=1.4.15&key=565f4428b3187dfafb7274ddcfa50eb8"></script>
+<script>
+    var map = new AMap.Map('container',{
+        zoom:14,
+        center:[104.069647,30.631362]
+    });
+    map.setMapStyle('amap://styles/4495319745976b5be5b1e0ad3f18ed11');
+  //  map.setCity("成都市");
+   // map.setZoomAndCenter(10, [104.069647, 30.631362]);
+
+    var circle = new AMap.Circle({
+        map:map,
+        center:[104.066143,30.605106],
+        radius:50,
+        fillOpacity:0,
+        strokeOpacity:0
+    });
+
+    circle.on('click',function f() {
+        location.href="https://www.thingjs.com/s/7ac09657392d26dd657c1d82";
+    });
+
+    var bounds =  new AMap.Bounds([103.734775,30.344803], [104.446826,30.87018]);
+    map.setLimitBounds(bounds);
+</script>
 </body>
 </html>

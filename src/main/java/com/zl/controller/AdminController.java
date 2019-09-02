@@ -159,6 +159,7 @@ public class AdminController {
     @RequestMapping("/UpdateStation")
     public String updateStation(int stationId,String newStationName,String newStationUrl){
         stationService.updateStation(stationId,newStationName,newStationUrl);
+
         return "修改站点信息成功";
     }
     /**
@@ -168,6 +169,7 @@ public class AdminController {
     @RequestMapping("/UpdateThing")
     public String updateThing(int id,String tname,String tposition,String tid,String tgroup,String tcamera){
         thingsService.updateThing(id,tname,tposition,tid,tgroup,tcamera);
+        thingsService.oneThing(id);
         return "修改物体信息成功";
 
     }

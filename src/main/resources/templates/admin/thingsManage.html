@@ -32,9 +32,10 @@
                 }
                 html+="</tbody></table><input type=\"button\" class=\"btn btn-danger\" data-toggle=\"modal\" data-target=\"#deleteAllModal\" value=\"批量删除\" onclick=\"openModal('/admin/toDeleteAll','deleteAllModal')\"/><div>";
                 document.getElementById("detail").innerHTML = html;
+               // window.location.reload();
             }
         });
-        var timer = setTimeout(s,2000);
+      //  var timer = setTimeout(s,2000);
     });
 
     function ckAll(){

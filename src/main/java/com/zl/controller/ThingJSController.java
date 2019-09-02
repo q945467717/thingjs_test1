@@ -8,6 +8,7 @@ import com.zl.model.Things;
 import com.zl.service.LineService;
 import com.zl.service.ThingJSService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/thingJS")
 public class ThingJSController {
@@ -46,17 +48,17 @@ public class ThingJSController {
     /**
      * 进出人员信息（卡号，时间）
      * @param response
-     * @param needdoorlist 需要显示该信息的闸机的ID
+     * @param doorId 需要显示该信息的闸机的ID
      * @return
      */
     @RequestMapping("/doorPeopleInfo")
-    public List doorPeopleInfo(HttpServletResponse response, @RequestParam("needdoorlist[]") String[] needdoorlist){
+    public List doorPeopleInfo(HttpServletResponse response, @RequestParam("doorId[]") String[] doorId){
 
         response.setHeader("Access-Control-Allow-Origin","*");
         response.setHeader("Access-Control-Allow-Credentials","true");
 
         List<ThingJsUser> list2 = new ArrayList<ThingJsUser>();
-        for (String s : needdoorlist) {
+        for (String s : doorId) {
             List<ThingJsUser> list = thingJSService.peopleInfo(s);
             list2.addAll(list);
         }
@@ -67,19 +69,17 @@ public class ThingJSController {
 
     /**
      * 闸机进出人数
-     * @param response
-     * @param needdoorlist 需要显示该信息的闸机的ID
-     * @return
+     * @param doorNum 需要显示该信息的闸机的ID
      */
     @RequestMapping("/doorPeopleNum")
-    public List doorPeopleNum(HttpServletResponse response, @RequestParam("needdoorlist[]") String[] needdoorlist){
+    public List doorPeopleNum(HttpServletResponse response, @RequestParam("doorNum[]") String[] doorNum){
 
         response.setHeader("Access-Control-Allow-Origin","*");
         response.setHeader("Access-Control-Allow-Credentials","true");
 
         List<Map> list = new ArrayList<Map>();
 
-        for (String s : needdoorlist) {
+        for (String s : doorNum) {
             Map<String,Object> map = new HashMap<String, Object>();
             map.put("id", s);
             map.put("num", thingJSService.peopleNum(s));
