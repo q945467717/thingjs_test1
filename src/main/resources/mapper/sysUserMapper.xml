@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zl.mapper.SysUserMapper">
+
+<!--    <select id="allsysUser" resultMap="selectSysUser">-->
+<!--    select username from sys_user-->
+<!--</select>-->
+<!--    <select id="selectRole" parameterType="int" resultType="SysRole">-->
+<!--        SELECT * FROM sys_user_roles LEFT JOIN sys_role ON sys_user_roles.roles_id=sys_role.id where sys_user_id=#{id}-->
+<!--    </select>-->
+<!--    <resultMap id="selectSysUser" type="SysUser">-->
+<!--        <id property="id" column="id"/>-->
+<!--        <result property="username" column="username"/>-->
+<!--        <collection property="roles" ofType="SysRole" select="selectRole" column="id">-->
+<!--            <id property="id" column="id"/>-->
+<!--            <result property="name" column="name"/>-->
+<!--        </collection>-->
+<!--    </resultMap>-->
+
+</mapper>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <!--引入统一头-->
 <head th:include="import/head :: head"></head>
 <body class="fixed-sidebar full-height-layout" style="min-width: 1550px;overflow: visible">
@@ -16,14 +16,21 @@
                     </div>
                     <div class="logo-element">3D</div>
                 </li>
-                <li >
+<!--                <li sec:authorize="hasRole('ROLE_ADMIN')">-->
+                <li>
                     <a  class="J_menuItem" th:href="@{/admin/lineManage}" title="线路管理">
                         <i class="fa fa-users"></i>
                         <span class="nav-label">线路管理</span>
                     </a>
-                    <a class="J_menuItem" th:href="@{/admin/thingJsUser/list2}" title="权限管理">
+                    <a class="J_menuItem" th:href="@{/sys/peopleManage}" title="权限管理">
                         <i class="fa fa-users"></i>
                         <span class="nav-label">权限管理</span>
+                    </a>
+                </li>
+                <li sec:authorize="hasRole('')">
+                    <a  class="J_menuItem" th:href="@{/admin}" title="线路管理">
+                        <i class="fa fa-users"></i>
+                        <span class="nav-label"></span>
                     </a>
                 </li>
             </ul>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head th:include="import/head :: head"></head>
+
+<script>
+    $(document).ready(function() {
+
+        var authority;
+
+        $.ajax({
+            // contentType: 'application/json;charset=UTF-8',
+            url:"http://localhost:8080/sys/authorityManage",
+            type:"get",
+            async:false,
+            dataType:"json",
+            success:function (data) {
+                authority = data.data;
+                var html = "<div style='width:95%'><table class='table table-striped table-bordered' style='text-align:center'><thead><tr>" +
+                    "<th style='text-align:center'>用户名</th><th style='text-align:center'>管理的站点</th><th style='text-align:center'>可进行的操作</th><th style='text-align:center'>操作</th></tr></thead><tbody>";
+                for(var i=0;i<data.data.length;i++){
+                    html+="<tr><td style='width: 200px'>"+data.data[i].username+"</td><td></td><td style='width:500px'><div style='float:left;width: 100px'><input type='checkbox' id='a"+i+"' value='"+data.data[i].id+"'>添加</div><div style='float:left;width: 100px'><input type='checkbox' id='d"+i+"' value='"+data.data[i].id+"'>删除</div><div style='float:left;width: 100px'><input type='checkbox' id='u"+i+"' value='"+data.data[i].id+"'>修改</div></td>" +
+                        "<td style='width: 200px'><a data-toggle=\"modal\" data-target=\"#updateThingModal\" class=\"btn btn-sm btn-warning\" onclick=\"openModal('/admin/toUpdateThing','updateThingModal',this.id)\">修改</a>" +
+                        "<a data-toggle='modal' data-target='#deleteThingModal' class='btn btn-sm btn-danger' onclick=\"openModal('/admin/toDeleteThing','deleteThingModal',this.id)\">删除</a></td><tr>"
+                }
+                html+="</tbody></table>";
+                document.getElementById("administrator").innerHTML = html;
+            }
+        });
+        for(var s= 0;s<authority.length;s++){
+            if(authority[s].sadd==="1"){
+                $('#a'+s).attr("checked","checked")
+            }
+            if(authority[s].sdelete==="1"){
+                $('#d'+s).attr("checked","checked")
+            }
+            if(authority[s].supdate==="1"){
+                $('#u'+s).attr("checked","checked")
+            }
+        }
+        for(var a= 0;a<authority.length;a++){
+            $('#a'+a).change(function () {
+                $.ajax({
+                    // contentType: 'application/json;charset=UTF-8',
+                    url:"http://localhost:8080/sys/setAddAuthority",
+                    type:"post",
+                    data:{"id":this.value},
+                    dataType:"json",
+                    success:function (data) {
+                    }
+                });
+            });
+            $('#d'+a).change(function () {
+                $.ajax({
+                    // contentType: 'application/json;charset=UTF-8',
+                    url:"http://localhost:8080/sys/setDeleteAuthority",
+                    type:"post",
+                    data:{"id":this.value},
+                    dataType:"json",
+                    success:function (data) {
+                    }
+                });
+            });
+            $('#u'+a).change(function () {
+                $.ajax({
+                    // contentType: 'application/json;charset=UTF-8',
+                    url:"http://localhost:8080/sys/setUpdateAuthority",
+                    type:"post",
+                    data:{"id":this.value},
+                    dataType:"json",
+                    success:function (data) {
+                    }
+                });
+            })
+        }
+
+    });
+
+
+
+
+
+</script>
+
+<body>
+<div class="ibox float-e-margins" >
+    <div class="ibox-title">
+        <h3 style="display: inline;">
+            权限管理<input type="button" class="btn btn-success" data-toggle="modal" data-target="#addThingModal" value="添加管理员" style="margin-left: 80%;display: inline" />
+        </h3>
+    </div>
+    <!--数据展示-->
+    <div class="ibox-content" id="administrator">
+    </div>
+</div>
+
+<script th:replace="import/script :: script"></script>
+</body>
+</html>

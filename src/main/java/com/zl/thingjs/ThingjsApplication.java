@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 
 @EntityScan("com.zl.model")
-@ComponentScan(basePackages = {"com.zl.controller","com.zl.service","com.zl.configuration","com.zl.security"})
+@ComponentScan(basePackages = {"com.zl.controller","com.zl.service","com.zl.configuration","com.zl.security","com.zl.Util"})
 @MapperScan("com.zl.mapper")
 @SpringBootApplication
 public class ThingjsApplication {

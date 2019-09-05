@@ -29,7 +29,9 @@ public class AdminController {
 
     //跳转到线路管理页面
     @RequestMapping("/lineManage")
-    public String lineManage(){ return "/admin/lineManage"; }
+    public String lineManage(){
+        return "/admin/lineManage";
+    }
     //跳转到物体管理页面
     @RequestMapping("/thingsManage")
     public String thingsManage(HttpServletRequest request,Model model){
@@ -38,7 +40,6 @@ public class AdminController {
         model.addAttribute("stationId",id);
         return "/admin/thingsManage";
     }
-
     //跳转到管理员首页
     @RequestMapping("/index")
     public String adminIndex(){
@@ -169,7 +170,6 @@ public class AdminController {
     @RequestMapping("/UpdateThing")
     public String updateThing(int id,String tname,String tposition,String tid,String tgroup,String tcamera){
         thingsService.updateThing(id,tname,tposition,tid,tgroup,tcamera);
-        thingsService.oneThing(id);
         return "修改物体信息成功";
 
     }
@@ -261,6 +261,12 @@ public class AdminController {
 
         return lineService.lineList();
     }
+//    @ResponseBody
+//    @RequestMapping("/allLine")
+//    public Result allLine(HttpServletResponse response){
+//
+//        return ResultUtil.success(response.getStatus(),lineService.lineList());
+//    }
 
     /**
      * 展示站点物体接口

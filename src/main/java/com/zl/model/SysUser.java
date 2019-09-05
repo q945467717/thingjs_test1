@@ -13,8 +13,35 @@ public class SysUser implements UserDetails {
     private String id;
     private String username;
     private String password;
-    private List<SysRole> roles;
+    private String sadd;
+    private String sdelete;
+    private String supdate;
 
+    public String getSadd() {
+        return sadd;
+    }
+
+    public void setSadd(String sadd) {
+        this.sadd = sadd;
+    }
+
+    public String getSdelete() {
+        return sdelete;
+    }
+
+    public void setSdelete(String sdelete) {
+        this.sdelete = sdelete;
+    }
+
+    public String getSupdate() {
+        return supdate;
+    }
+
+    public void setSupdate(String supdate) {
+        this.supdate = supdate;
+    }
+
+    private List<SysRole> roles;
 
     public String getId() {
         return id;
@@ -81,5 +108,18 @@ public class SysUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "SysUser{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", sadd='" + sadd + '\'' +
+                ", sdelete='" + sdelete + '\'' +
+                ", supdate='" + supdate + '\'' +
+                ", roles=" + roles +
+                '}';
     }
 }

@@ -20,14 +20,17 @@ public class FormLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandl
 
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
 
-        if(roles.contains("ROLE_ADMIN")){
-            response.sendRedirect("/admin/index");
-        }else {
-            response.sendRedirect("/user/index");
-        }
-//        if(roles.contains("ROLE_USER")){
+//        if(roles.contains("ROLE_ADMIN")){
+//            response.sendRedirect("/admin/index");
+//        }
+//        else {
 //            response.sendRedirect("/user/index");
 //        }
+        if(roles.contains("ROLE_USER")){
+            response.sendRedirect("/user/index");
+        }else {
+            response.sendRedirect("/admin/index");
+        }
 
        // super.onAuthenticationSuccess(request, response, authentication);
     }
