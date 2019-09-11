@@ -1,41 +1,138 @@
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
-<div class="modal-dialog" style="width: 300px">
+<style>
+    li{
+        list-style: none
+    }
+    ul{
+        margin:0;
+        padding:0;
+        height: 85px;
+        max-height: 85px;
+        overflow-y:scroll
+    }
+</style>
+
+<div class="modal-dialog" style="width: 300px" xmlns:th="http://www.thymeleaf.org" >
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="newName">新名称</h4>
+            <h4 class="modal-title" id="myModalLabel">管理的站点</h4>
         </div>
-        <div class="modal-body" style="width: 300px">请输入新名称：<input type="text" id="newStationName" th:value="${station.stationName}"/></div>
-        <div class="modal-body" style="width: 300px">请输入新Url：<input type="text" id="newStationUrl" th:value="${station.sceneId}"/></div>
+        <div style="float: right;width: 100px;height: 115px"><div>已选择站点</div><div style="border:1px solid #0C0C0C;height: 90px;max-height: 88px"><ul id="select"></ul></div></div>
+        <div style="width: 250px">
+            <div class="modal-body" style="width: 200px">请选择管理的线路：<select style="width: 172px;height: 25px" id="line"></select></div>
+            <div class="modal-body" style="width: 200px">请选择管理的站点：<select style="width: 172px;height: 25px" id="station"><option>请选择站点</option></select></div></div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            <button type="button" th:id="${station.stationId}" class="btn btn-primary" onclick="updateStation(this.id)" >确定修改</button>
+            <!--/*@thymesVar id="userId" type="java"*/-->
+            <button th:id="${userId}" type="button" class="btn btn-primary" onclick="updateAdmin(this.id)" >确定</button>
         </div>
     </div>
 </div>
-</html>
 
 <script>
 
-    function updateStation(id) {
+    $(document).ready(function () {
 
-        var newStationName = $("#newStationName").val();
-        var newStationUrl = $("#newStationUrl").val();
+        var doption = document.createElement("option");
+        $(doption).text("请选择线路");
+        $("#line").append(doption);
+        $.ajax({
+            // contentType: 'application/json;charset=UTF-8',
+            url:"http://localhost:8080/admin/allLine",
+            type:"get",
+            dataType:"json",
+            success:function (data) {
+                for(var i=0;i<data.length;i++){
+                    var option = document.createElement("option");
+                    $(option).text(data[i].lineName);
+                    $('#line').append(option);
+                }
+            }
+        });
+
+        $('#line').change(function () {
+            $("#station").empty();
+            var doption = document.createElement("option");
+            $(doption).text("请选择站点");
+            $("#station").append(doption);
+
+            $.ajax({
+                // contentType: 'application/json;charset=UTF-8',
+                url:"http://localhost:8080/admin/allLine",
+                type:"get",
+                dataType:"json",
+                success:function (data) {
+                    var obj = document.getElementById('line');
+                    var index = obj.selectedIndex;
+                    var text = obj.options[index].text;
+                    for(var i=0;i<data.length;i++){
+                        if(data[i].lineName===text){
+                            for(var j=0;j<data[i].station.length;j++){
+                                var option = document.createElement("option");
+                                $(option).text(data[i].station[j].stationName);
+                                $('#station').append(option);
+                            }
+                        }
+                    }
+                }
+            });
+        });
+        $("#station").change(function () {
+            var obj = document.getElementById('station');
+            var index = obj.selectedIndex;
+            var text = obj.options[index].text;
+
+            var flag=false;
+
+            $("#select").find("li").each(function () {
+               if($(this).text()===text){
+                   swal({
+                       title: "该站点已存在",
+                       type: "error"
+                   });
+                   flag =true
+               }
+            });
+            if(!flag&&text!=="请选择站点"){
+                $("#select").append("<li onclick='$(this).remove()'>"+text+"</li>");
+            }
+        })
+    });
+
+    function updateAdmin(id) {
+
+        console.log(id);
+
+        var obj = document.getElementById('station');
+        var index = obj.selectedIndex;
+
+        var stationList = [];
+        $("#select").find("li").each(function () {
+            stationList.push($(this).text())
+        });
 
         $.ajax({
             // contentType: 'application/json;charset=UTF-8',
-            url:"/admin/UpdateStation",
-            data:{'stationId':id,"newStationName":newStationName,"newStationUrl":newStationUrl},
+            url:"http://localhost:8080/sys/updateAdmin",
+            data:{'userId':id,"stationName":stationList},
             type:"POST",
-            dataType:"text",
+            dataType:"json",
             success:function (data) {
-                swal({
-                    title: data,
-                    type: "success"
-                },function(){
-                    $('#updateStationModal').modal('hide');
-                    window.location.reload();
-                });
+
+                if(data.code===0){
+                    swal({
+                        title: data.msg,
+                        type: "error"
+                    });
+                }else {
+                    swal({
+                        title: data.data,
+                        type: "success"
+                    },function(){
+                        $('#addAdminModal').modal('hide');
+                        window.location.reload();
+                    });
+                }
             }
         })
     }

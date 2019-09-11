@@ -181,4 +181,17 @@ public class SysUserServiceImpl implements SysUserService{
 
     }
 
+    @Override
+    @Transactional
+    public void updateAdmin(String[] stationName, Integer userId) {
+
+        sysUserMapper.deleteStationRoles(userId);
+
+        for(String name:stationName){
+            Station station = stationMapper.oneStationByName(name);
+            sysUserMapper.addStation(userId,station.getStationId());
+        }
+
+    }
+
 }

@@ -20,6 +20,7 @@ public class SysUserController {
     @Autowired
     private SysUserService sysUserService;
 
+    //添加管理员接口
     @ResponseBody
     @RequestMapping("/register")
     public Result register(@RequestParam("stationName[]")String[] stationName, String username, String password, HttpServletResponse response){
@@ -59,6 +60,14 @@ public class SysUserController {
 
         return "/modal/deleteAdminModal";
     }
+    //去修改管理员模态框
+    @RequestMapping("/toUpdateAdmin")
+    public String toUpdateAdmin(Integer id , Model model){
+
+        model.addAttribute("userId",id);
+
+        return "/modal/updateAdminModal";
+    }
 
     //删除管理员接口
     @ResponseBody
@@ -72,7 +81,20 @@ public class SysUserController {
             return ResultUtil.error(0,e.getMessage());
         }
         return ResultUtil.success(response.getStatus(),"删除成功");
+    }
 
+    //修改管理员接口
+    @ResponseBody
+    @RequestMapping("/updateAdmin")
+    public Result updateAdmin(@RequestParam("stationName[]")String[] stationName,Integer userId, HttpServletResponse response){
+
+        try {
+            sysUserService.updateAdmin(stationName,userId);
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResultUtil.error(0,e.getMessage());
+        }
+        return ResultUtil.success(response.getStatus(),"修改成功");
     }
 
 

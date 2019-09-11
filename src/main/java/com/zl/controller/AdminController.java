@@ -4,7 +4,6 @@ import com.zl.Util.ResultUtil;
 import com.zl.model.*;
 import com.zl.service.LineService;
 import com.zl.service.StationService;
-import com.zl.service.SysUserService;
 import com.zl.service.ThingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -100,7 +99,6 @@ public class AdminController {
     //去修改站点名称模态框
     @RequestMapping("/toUpdateStation")
     public String toUpdateStation(Integer id, Model model){
-       // model.addAttribute("id",id);
         Station station = stationService.oneStation(id);
         model.addAttribute("station",station);
         return "modal/updateStationModal";
@@ -108,7 +106,6 @@ public class AdminController {
     //去修改物体名称模态框
     @RequestMapping("/toUpdateThing")
     public String toUpdateThing(Integer id, Model model){
-      //  model.addAttribute("id",id);
         Things thing = thingsService.oneThing(id);
         model.addAttribute("thing",thing);
         return "modal/updateThingModal";

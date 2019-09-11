@@ -25,5 +25,7 @@ public interface SysUserService {
 
     void changePassword(String password);
 
+    void updateAdmin(String[] stationName,Integer userId);
+
 
 }

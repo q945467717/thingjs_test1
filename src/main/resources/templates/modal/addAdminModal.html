@@ -1,14 +1,27 @@
+<style>
+    li{
+        list-style: none
+    }
+    ul{
+        margin:0;
+        padding:0;
+        height: 172px;
+        max-height: 172px;
+        overflow-y:scroll
+    }
+</style>
+
 <div class="modal-dialog" style="width: 300px">
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title" id="myModalLabel">新增管理员</h4>
         </div>
-        <div style="float: right;width: 100px;height: 210px"><div>已选择站点</div><textarea id="selected" style="width: 100px;height: 190px" rows="8" readonly></textarea></div>
-        <div style="width: 250px"><div class="modal-body" style="width: 250px">请输入用户名:<input type="text" id="username" /></div>
-        <div class="modal-body" style="width: 250px">请输入密码:  <input type="password" id="password" /></div>
-        <div class="modal-body" style="width: 250px">请选择管理的线路：<select style="width: 172px;height: 25px" id="line"></select></div>
-            <div class="modal-body" style="width: 250px">请选择管理的站点：<select style="width: 172px;height: 25px" id="station"><option>请选择站点</option></select></div></div>
+        <div style="float: right;width: 100px;height: 210px"><div>已选择站点<br>(点击名称移除)</div><div style="border:1px solid #0C0C0C;height: 174px;max-height: 174px"><ul id="select"></ul></div></div>
+        <div style="width: 250px"><div class="modal-body" style="width: 200px">请输入用户名:<input type="text" id="username" /></div>
+        <div class="modal-body" style="width: 200px">请输入密码:  <input type="password" id="password" /></div>
+        <div class="modal-body" style="width: 200px">请选择管理的线路：<select style="width: 172px;height: 25px" id="line"></select></div>
+            <div class="modal-body" style="width: 200px">请选择管理的站点：<select style="width: 172px;height: 25px" id="station"><option>请选择站点</option></select></div></div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             <button type="button" class="btn btn-primary" onclick="addAdmin()" >确定</button>
@@ -69,19 +82,20 @@
             var obj = document.getElementById('station');
             var index = obj.selectedIndex;
             var text = obj.options[index].text;
-            var str =$("#selected").val();
-            var split = str.split(",");
-            for(var i=0;i<split.length-1;i++){
-                if(split[i]===text){
+
+            var flag=false;
+
+            $("#select").find("li").each(function () {
+                if($(this).text()===text){
                     swal({
                         title: "该站点已存在",
                         type: "error"
                     });
-                    return;
+                    flag =true
                 }
-            }
-            if(text!=="请选择站点"){
-                $("#selected").val(str+text+",");
+            });
+            if(!flag&&text!=="请选择站点"){
+                $("#select").append("<li onclick='$(this).remove()'>"+text+"</li>");
             }
         })
 
@@ -108,14 +122,11 @@
         var password = $("#password").val();
         var obj = document.getElementById('station');
         var index = obj.selectedIndex;
-        //var stationName = obj.options[index].text;
 
-        var selected = $("#selected").val();
-        var split = selected.split(",");
         var stationList = [];
-        for(var i=0;i<split.length-1;i++){
-            stationList.push(split[i])
-        }
+        $("#select").find("li").each(function () {
+            stationList.push($(this).text())
+        });
 
         $.ajax({
             // contentType: 'application/json;charset=UTF-8',
