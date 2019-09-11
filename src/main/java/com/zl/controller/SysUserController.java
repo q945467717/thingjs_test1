@@ -1,7 +1,6 @@
 package com.zl.controller;
 
 import com.zl.Util.ResultUtil;
-import com.zl.exception.UserNotExistException;
 import com.zl.model.Result;
 import com.zl.model.SysUser;
 import com.zl.service.SysUserService;
