@@ -9,6 +9,8 @@ import com.zl.service.StationService;
 import com.zl.service.SysUserService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -163,6 +165,20 @@ public class SysUserServiceImpl implements SysUserService{
         sysUserMapper.deleteStationRoles(userId);
 
         sysUserMapper.deleteUserRoles(userId);
+    }
+
+    //修改密码
+    @Override
+    public void changePassword(String password) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        SysUser principal =(SysUser) authentication.getPrincipal();
+
+        String newPassword = bCryptPasswordEncoder.encode(password);
+
+        sysUserMapper.changePassword(principal.getUsername(),newPassword);
+
     }
 
 }

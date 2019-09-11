@@ -23,5 +23,7 @@ public interface SysUserService {
 
     void deleteAdmin(Integer userId);
 
+    void changePassword(String password);
+
 
 }

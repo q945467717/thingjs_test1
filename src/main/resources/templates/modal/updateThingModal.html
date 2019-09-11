@@ -46,10 +46,14 @@
             type:"POST",
             dataType:"text",
             success:function (data) {
+                swal({
+                    title: data,
+                    type: "success"
+                },function(){
+                    $('#updateThingModal').modal('hide');
+                    window.location.reload();
+                });
 
-                 alert(data);
-                $('#updateThingModal').modal('hide')
-                window.location.reload();
             }
         })
     }

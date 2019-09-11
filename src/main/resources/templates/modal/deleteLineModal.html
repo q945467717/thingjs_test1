@@ -23,11 +23,13 @@
                 type: "POST",
                 dataType: "text",
                 success: function (data) {
-                    alert(data);
-                    $('#deleteLineModal').modal('hide')
-                    window.location.reload();
-                },
-                error: function () {
+                    swal({
+                        title: data,
+                        type: "success"
+                    },function(){
+                        $('#deleteLineModal').modal('hide');
+                        window.location.reload();
+                    });
                 }
             });
     }

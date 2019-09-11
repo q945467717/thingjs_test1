@@ -20,18 +20,24 @@
             url:"/admin/AddLine",
             data:{'lineName':lineName},
             type:"POST",
-            dataType:"text",
+            dataType:"json",
             success:function (data) {
-                alert(data);
-                $('#lineModal').modal('hide');
-                window.location.reload();
-
-            },
-            error:function () {
-                alert("线路已存在");
-                $('#lineModal').modal('hide')
-                window.location.reload();
+                if(data.code===0){
+                    swal({
+                        title: data.msg,
+                        type: "error"
+                    });
+                }else {
+                    swal({
+                        title: data.data,
+                        type: "success"
+                    },function(){
+                        $('#lineModal').modal('hide');
+                        window.location.reload();
+                    });
+                }
             }
+
         })
     }
 </script>

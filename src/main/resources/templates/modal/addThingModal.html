@@ -44,9 +44,13 @@
             type:"POST",
             dataType:"text",
             success:function (data) {
-                alert(data);
-                $('#addThingModal').modal('hide');
-                window.location.reload();
+                swal({
+                    title: data,
+                    type: "success"
+                },function(){
+                    $('#addThingModal').modal('hide');
+                    window.location.reload();
+                });
             }
         })
     }

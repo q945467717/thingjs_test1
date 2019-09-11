@@ -29,11 +29,13 @@
             type:"POST",
             dataType:"text",
             success:function (data) {
-                alert(data);
-                $('#updateStationModal').modal('hide')
-                window.location.reload();
-            },
-            error:function () {
+                swal({
+                    title: data,
+                    type: "success"
+                },function(){
+                    $('#updateStationModal').modal('hide');
+                    window.location.reload();
+                });
             }
         })
     }

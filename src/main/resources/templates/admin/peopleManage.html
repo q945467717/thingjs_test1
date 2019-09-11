@@ -42,51 +42,105 @@
         }
         for(var a= 0;a<authority.length;a++){
             $('#a'+a).change(function () {
-                $.ajax({
-                    // contentType: 'application/json;charset=UTF-8',
-                    url:"http://localhost:8080/sys/setAddAuthority",
-                    type:"post",
-                    data:{"id":this.value},
-                    dataType:"json",
-                    success:function (data) {
+                var id=this.value;
+                swal({
+                    title: "确定修改该权限吗？",
+                    type: "info",
+                    showCancelButton:true,
+                    confirmButtonText: "确认",
+                    cancelButtonText:"取消"
+                },function(isConfirm){
+                    if(isConfirm===true){
+                        $.ajax({
+                            // contentType: 'application/json;charset=UTF-8',
+                            url:"http://localhost:8080/sys/setAddAuthority",
+                            type:"post",
+                            data:{"id":id},
+                            dataType:"json",
+                            success:function (data) {
+                            }
+                        });
+                    }else {
+                        window.location.reload();
                     }
                 });
             });
             $('#d'+a).change(function () {
-                $.ajax({
-                    // contentType: 'application/json;charset=UTF-8',
-                    url:"http://localhost:8080/sys/setDeleteAuthority",
-                    type:"post",
-                    data:{"id":this.value},
-                    dataType:"json",
-                    success:function (data) {
+
+                var value=this.value;
+                swal({
+                    title: "确定修改该权限吗？",
+                    type: "info",
+                    showCancelButton:true,
+                    confirmButtonText: "确认",
+                    cancelButtonText:"取消"
+                },function(isConfirm){
+                    if(isConfirm===true){
+                        $.ajax({
+                            // contentType: 'application/json;charset=UTF-8',
+                            url:"http://localhost:8080/sys/setDeleteAuthority",
+                            type:"post",
+                            data:{"id":value},
+                            dataType:"json",
+                            success:function (data) {
+                            }
+                        });
+                    }else {
+                        window.location.reload();
                     }
                 });
             });
             $('#u'+a).change(function () {
-                $.ajax({
-                    // contentType: 'application/json;charset=UTF-8',
-                    url:"http://localhost:8080/sys/setUpdateAuthority",
-                    type:"post",
-                    data:{"id":this.value},
-                    dataType:"json",
-                    success:function (data) {
+
+                var value=this.value;
+                swal({
+                    title: "确定修改该权限吗？",
+                    type: "info",
+                    showCancelButton:true,
+                    confirmButtonText: "确认",
+                    cancelButtonText:"取消"
+                },function(isConfirm){
+                    if(isConfirm===true){
+                        $.ajax({
+                            // contentType: 'application/json;charset=UTF-8',
+                            url:"http://localhost:8080/sys/setUpdateAuthority",
+                            type:"post",
+                            data:{"id":value},
+                            dataType:"json",
+                            success:function (data) {
+                            }
+                        });
+                    }else {
+                        window.location.reload();
                     }
                 });
             });
             $('#us'+a).change(function () {
-                $.ajax({
-                    // contentType: 'application/json;charset=UTF-8',
-                    url:"http://localhost:8080/sys/setStationUpdateAuthority",
-                    type:"post",
-                    data:{"id":this.value},
-                    dataType:"json",
-                    success:function (data) {
+
+                var value=this.value;
+                swal({
+                    title: "确定修改该权限吗？",
+                    type: "info",
+                    showCancelButton:true,
+                    confirmButtonText: "确认",
+                    cancelButtonText:"取消"
+                },function(isConfirm){
+                    if(isConfirm===true){
+                        $.ajax({
+                            // contentType: 'application/json;charset=UTF-8',
+                            url:"http://localhost:8080/sys/setStationUpdateAuthority",
+                            type:"post",
+                            data:{"id":value},
+                            dataType:"json",
+                            success:function (data) {
+                            }
+                        });
+                    }else {
+                        window.location.reload();
                     }
                 });
             })
         }
-
     });
 
 </script>

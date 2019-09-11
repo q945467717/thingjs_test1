@@ -147,13 +147,14 @@ public class AdminController {
      */
     @ResponseBody
     @RequestMapping("/AddLine")
-    public String addLine(String lineName){
+    public Result addLine(String lineName,HttpServletResponse response){
 
         if(lineName!=null&&lineName.length()!=0){
             lineService.addLine(lineName);
-            return "新增线路成功";
+            //return "新增线路成功";
+            return ResultUtil.success(response.getStatus(),"新增线路成功");
         }else {
-            return "请输入线路名称";
+            return ResultUtil.error(0,"请输入线路名称");
         }
     }
     /**
@@ -163,14 +164,15 @@ public class AdminController {
      */
     @ResponseBody
     @RequestMapping("/UpdateLine")
-    public String updateLine(String lineName,String newlineName){
+    public Result updateLine(String lineName,String newlineName,HttpServletResponse response){
 
         if(newlineName!=null&&newlineName.length()!=0) {
             Line line = lineService.oneLine(lineName);
             lineService.updateLine(line.getId(),newlineName);
-            return "修改线路名称成功";
+            //return "修改线路名称成功";
+            return ResultUtil.success(response.getStatus(),"修改线路名称成功");
         }
-        return "请输入线路名称";
+        return ResultUtil.error(0,"请输入线路名称");
     }
     /**
      * 修改站点名称接口
@@ -214,8 +216,6 @@ public class AdminController {
     @ResponseBody
     @RequestMapping("/DeleteStation")
     public String deleteStation(Integer stationId){
-
-
 
         stationService.deleteStation(stationId);
 
@@ -263,14 +263,14 @@ public class AdminController {
      */
     @ResponseBody
     @RequestMapping("/AddStation")
-    public String addStation(String lineName, String stationName,String sceneUrl){
+    public Result addStation(String lineName, String stationName,String sceneUrl,HttpServletResponse response){
 
         if(stationName!=null&&stationName.length()!=0) {
             Line line = lineService.oneLine(lineName);
             stationService.addStation(line.getId(), stationName,sceneUrl);
-            return "新增站点成功";
+            return ResultUtil.success(response.getStatus(),"添加站点成功");
         }else {
-            return "请输入站点名称";
+            return ResultUtil.error(0,"请输入站点名称");
         }
     }
 

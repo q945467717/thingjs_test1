@@ -58,4 +58,7 @@ public interface SysUserMapper {
     @Delete("delete from sys_user_roles where sys_user_id=#{userId}")
     void deleteUserRoles(Integer userId);
 
+    @Update("update sys_user set password=#{password} where username=#{username}")
+    void changePassword(String username,String password);
+
 }

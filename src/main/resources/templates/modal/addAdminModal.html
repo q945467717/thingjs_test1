@@ -73,11 +73,16 @@
             var split = str.split(",");
             for(var i=0;i<split.length-1;i++){
                 if(split[i]===text){
-                    alert("该站点已存在");
+                    swal({
+                        title: "该站点已存在",
+                        type: "error"
+                    });
                     return;
                 }
             }
-            $("#selected").val(str+text+",");
+            if(text!=="请选择站点"){
+                $("#selected").val(str+text+",");
+            }
         })
 
     });
@@ -85,11 +90,17 @@
     function addAdmin() {
 
         if($("#username").val()===''){
-            alert("请输入用户名");
+            swal({
+                title: "请输入用户名",
+                type: "warning"
+            });
             return;
         }
         if($("#password").val()===''){
-            alert("请输入密码");
+            swal({
+                title: "请输入密码",
+                type: "warning"
+            });
             return;
         }
 
@@ -113,9 +124,21 @@
             type:"POST",
             dataType:"json",
             success:function (data) {
-                alert(data.msg);
-                $('#addAdminModal').modal('hide');
-                window.location.reload();
+
+                if(data.code===0){
+                    swal({
+                        title: data.msg,
+                        type: "error"
+                    });
+                }else {
+                    swal({
+                        title: data.data,
+                        type: "success"
+                    },function(){
+                        $('#addAdminModal').modal('hide');
+                        window.location.reload();
+                    });
+                }
             }
         })
 

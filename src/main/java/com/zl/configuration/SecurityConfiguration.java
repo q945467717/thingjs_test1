@@ -69,7 +69,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     /**
      * 登陆成功之后的后置跳转
-     * @return
      */
     @Bean
     public FormLoginSuccessHandler formLoginSuccessHandler() {

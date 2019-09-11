@@ -37,6 +37,13 @@ public class SysUserController {
         }
         return ResultUtil.success(response.getStatus(),"添加管理员成功");
     }
+    //修改密码
+    @ResponseBody
+    @RequestMapping("/changePassword")
+    public String changePassword(String password){
+        sysUserService.changePassword(password);
+        return "ok";
+    }
 
     //去添加管理员模态框
     @RequestMapping("/toAddAdmin")

@@ -25,13 +25,22 @@
             url:"/admin/UpdateLine",
             data:{'lineName':id,"newlineName":newlineName},
             type:"POST",
-            dataType:"text",
+            dataType:"json",
             success:function (data) {
-                alert(data);
-                $('#updateLineModal').modal('hide')
-                window.location.reload();
-            },
-            error:function () {
+                if(data.code===0){
+                    swal({
+                        title: data.msg,
+                        type: "error"
+                    });
+                }else {
+                    swal({
+                        title: data.data,
+                        type: "success"
+                    },function(){
+                        $('#updateLineModal').modal('hide')
+                        window.location.reload();
+                    });
+                }
             }
         })
     }

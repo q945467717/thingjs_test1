@@ -26,11 +26,22 @@
             url:"/admin/AddStation",
             data:{"lineName":id,"stationName":stationName,"sceneUrl":sceneUrl},
             type:"POST",
-            dataType:"text",
+            dataType:"json",
             success:function (data) {
-                alert(data);
-                $('#addStationModal').modal('hide')
-                window.location.reload();
+                if(data.code===0){
+                    swal({
+                        title: data.msg,
+                        type: "error"
+                    });
+                }else {
+                    swal({
+                        title: data.data,
+                        type: "success"
+                    },function(){
+                        $('#addStationModal').modal('hide');
+                        window.location.reload();
+                    });
+                }
             }
         })
 
