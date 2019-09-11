@@ -10,12 +10,21 @@ import java.util.List;
 
 public class SysUser implements UserDetails {
 
-    private String id;
+    private int id;
     private String username;
     private String password;
     private String sadd;
     private String sdelete;
     private String supdate;
+    private String ssupdate;
+
+    public String getSsupdate() {
+        return ssupdate;
+    }
+
+    public void setSsupdate(String ssupdate) {
+        this.ssupdate = ssupdate;
+    }
 
     public String getSadd() {
         return sadd;
@@ -43,11 +52,11 @@ public class SysUser implements UserDetails {
 
     private List<SysRole> roles;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -113,12 +122,13 @@ public class SysUser implements UserDetails {
     @Override
     public String toString() {
         return "SysUser{" +
-                "id='" + id + '\'' +
+                "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", sadd='" + sadd + '\'' +
                 ", sdelete='" + sdelete + '\'' +
                 ", supdate='" + supdate + '\'' +
+                ", ssupdate='" + ssupdate + '\'' +
                 ", roles=" + roles +
                 '}';
     }

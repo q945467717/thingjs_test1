@@ -44,7 +44,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/admin/**","/user/**").authenticated()
                 .and()
-                .formLogin().loginPage("/toLogin").loginProcessingUrl("/login_check").failureUrl("/login-error").permitAll()
+                .formLogin().loginPage("/toLogin").loginProcessingUrl("/login_check").permitAll()
                 .successHandler(formLoginSuccessHandler())
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/toLogin")
                 .and().csrf().disable().headers().cacheControl();

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:include="import/head :: head"></head>
+<head th:include="import/head :: head"><title></title></head>
 <script>
 
     function getUrlParam(name) {
@@ -23,7 +23,7 @@
             type:"get",
             dataType:"json",
             success:function (data) {
-                var html = "<div style='width:95%'><table class='table table-striped table-bordered' style='text-align:center'><thead><tr ><th style=\"width: 30px\"><input type=\"checkbox\" id='allCheck' onclick='ckAll()'/></th>" +
+                var html = "<div style='width:95%'><table class='table table-striped table-bordered' style='text-align:center'><thead><tr><th style=\"width: 30px\"><input type=\"checkbox\" id='allCheck' onclick='ckAll()'/></th>" +
                     "<th style='text-align:center'>物体ID</th><th style='text-align:center'>物体名称</th><th style='text-align:center'>所在楼层</th><th style='text-align:center'>物体分组</th><th style='text-align:center;width: 600px'>监控</th><th style='text-align:center'>操作</th></tr></thead><tbody>";
                 for(var i=0;i<data.length;i++){
                     html+="<tr><td style=\"width: 30px\"><input type=\"checkbox\" name='check' value='"+data[i].id+"'/></td><td>"+data[i].tid+"</td><td>"+data[i].tname+"</td><td>"+data[i].tposition+"</td><td>"+data[i].tgroup+"</td><td>"+data[i].tcamera+"</td>" +

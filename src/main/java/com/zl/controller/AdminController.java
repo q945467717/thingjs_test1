@@ -1,12 +1,14 @@
 package com.zl.controller;
 
-import com.zl.model.Line;
-import com.zl.model.Station;
-import com.zl.model.Things;
+import com.zl.Util.ResultUtil;
+import com.zl.model.*;
 import com.zl.service.LineService;
 import com.zl.service.StationService;
+import com.zl.service.SysUserService;
 import com.zl.service.ThingsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
@@ -43,12 +46,30 @@ public class AdminController {
     //跳转到管理员首页
     @RequestMapping("/index")
     public String adminIndex(){
+
         return "admin/index";
+    }
+    //跳转到站点管理页面
+    @RequestMapping("/stationManage")
+    public String stationManage(Model model){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        SysUser sysUser = (SysUser) authentication.getPrincipal();
+
+        model.addAttribute("user",sysUser);
+
+        return "admin/stationManage";
     }
     //登陆成功欢迎页面
     @RequestMapping("/hello")
     public String hello(){
         return "admin/hello";
+    }
+    //无权限模态框
+    @RequestMapping("noAuthority")
+    public String noAuthority(){
+        return "modal/noAuthorityModal";
     }
     //去修改密码模态框
     @RequestMapping("/toChangePassword")
@@ -194,7 +215,19 @@ public class AdminController {
     @RequestMapping("/DeleteStation")
     public String deleteStation(Integer stationId){
 
+
+
         stationService.deleteStation(stationId);
+
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//
+//        SysUser sysUser = (SysUser) authentication.getPrincipal();
+//
+//        if(!sysUser.getUsername().equals("admin")){
+//            stationService.deleteStationRole(sysUser.getId(),stationId);
+//        }
+
+
         return "删除站点成功";
     }
 
@@ -209,12 +242,17 @@ public class AdminController {
         thingsService.deleteThing(id);
         return "删除物体成功";
     }
+
+    /**
+     * 批量删除
+     * @param checks 被选中
+     */
     @ResponseBody
     @RequestMapping("/deleteAll")
     public String deleteAll(@RequestParam("checks[]") int[] checks){
 
-        for(int i=0;i<checks.length;i++){
-            thingsService.deleteThing(checks[i]);
+        for (int check : checks) {
+            thingsService.deleteThing(check);
         }
         return "删除物体成功";
     }
@@ -277,5 +315,22 @@ public class AdminController {
     public List<Things> stationThings(int stationId){
 
         return thingsService.allThing(stationId);
+    }
+
+    /**
+     * 展示该管理员管理的站点接口
+     * @param userId 管理员ID
+     */
+    @ResponseBody
+    @RequestMapping("/adminStation")
+    public Result adminStation(int userId, HttpServletResponse response){
+
+        try {
+            stationService.adminStations(userId);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultUtil.error(0,e.getMessage());
+        }
+        return ResultUtil.success(response.getStatus(),stationService.adminStations(userId));
     }
 }

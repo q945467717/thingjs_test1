@@ -1,38 +1,46 @@
 package com.zl.controller;
 
 import com.zl.Util.ResultUtil;
+import com.zl.exception.UserNotExistException;
 import com.zl.model.Result;
 import com.zl.model.SysUser;
 import com.zl.service.SysUserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/sys")
 public class SysUserController {
 
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-    @Autowired
     private SysUserService sysUserService;
 
     @ResponseBody
     @RequestMapping("/register")
-    public String register(){
+    public Result register(@RequestParam("stationName[]")String[] stationName, String username, String password, HttpServletResponse response){
 
-        SysUser sysUser=new SysUser();
-        sysUser.setUsername("test2");
-        sysUser.setPassword("123456");
-        sysUserService.save(sysUser.getUsername(), bCryptPasswordEncoder.encode(sysUser.getPassword()));
-        return "Success";
+        try{
+            SysUser sysUser = sysUserService.logincheck(username);
+        }catch (Exception e ){
+            return ResultUtil.error(0,"用户名已存在");
+        }
+        try {
+                sysUserService.save(stationName,username,password);
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResultUtil.error(0,e.getMessage());
+        }
+        return ResultUtil.success(response.getStatus(),"添加管理员成功");
+    }
+
+    //去添加管理员模态框
+    @RequestMapping("/toAddAdmin")
+    public String toAddAdminModel(){
+        return "/modal/addAdminModal";
     }
 
     //跳转到权限管理页面
@@ -41,6 +49,7 @@ public class SysUserController {
         return "/admin/peopleManage";
     }
 
+    //管理员信息展示接口
     @ResponseBody
     @RequestMapping("/authorityManage")
     public Result authorityManage(HttpServletResponse response){
@@ -54,6 +63,7 @@ public class SysUserController {
         return ResultUtil.success(response.getStatus(),sysUserService.allsysUser());
     }
 
+    //修改权限
     @ResponseBody
     @RequestMapping("/setAddAuthority")
     public Result setAddAuthority(HttpServletResponse response,Integer id){
@@ -86,6 +96,19 @@ public class SysUserController {
 
         try {
             sysUserService.setUpdate(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultUtil.error(0,e.getMessage());
+        }
+        return ResultUtil.success(response.getStatus(),"修改权限成功");
+
+    }
+    @ResponseBody
+    @RequestMapping("/setStationUpdateAuthority")
+    public Result setStationUpdateAuthority(HttpServletResponse response,Integer id){
+
+        try {
+            sysUserService.setStationUpdate(id);
         }catch (Exception e){
             e.printStackTrace();
             return ResultUtil.error(0,e.getMessage());

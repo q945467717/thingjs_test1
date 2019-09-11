@@ -3,11 +3,11 @@ package com.zl.service;
 import com.zl.model.SysUser;
 
 import java.util.List;
-import java.util.Map;
+
 
 public interface SysUserService {
 
-    void save(String username,String password);
+    void save(String[] stationName,String username,String password);
 
     List allsysUser();
 
@@ -16,6 +16,10 @@ public interface SysUserService {
     void setDelete(Integer id);
 
     void setUpdate(Integer id);
+
+    void setStationUpdate(Integer id);
+
+    SysUser logincheck(String username);
 
 
 }

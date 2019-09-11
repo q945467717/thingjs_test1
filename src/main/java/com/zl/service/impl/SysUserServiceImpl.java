@@ -1,10 +1,18 @@
 package com.zl.service.impl;
 
+import com.zl.mapper.StationMapper;
 import com.zl.mapper.SysUserMapper;
+import com.zl.model.Station;
 import com.zl.model.SysUser;
+import com.zl.model.vo.SysUserStation;
+import com.zl.service.StationService;
 import com.zl.service.SysUserService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,59 +20,105 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class SysUserServiceImpl implements SysUserService {
+public class SysUserServiceImpl implements SysUserService{
 
     @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
     private SysUserMapper sysUserMapper;
+    @Autowired
+    private StationMapper stationMapper;
 
 
+    /**
+     * 新增管理员
+     * @param stationName 管理站点名称
+     * @param username  用户名
+     * @param password  密码
+     */
     @Override
-    public void save(String username, String password) {
-        sysUserMapper.save(username,password);
+    @Transactional
+    public void save(String[] stationName,String username, String password) {
+
+        List<Integer> stationList = new ArrayList<>();
+
+        for(String name :stationName){
+            Station station = stationMapper.oneStationByName(name);
+            stationList.add(station.getStationId());
+        }
+
+        SysUser sysUser = new SysUser();
+        //sysUser.setStationId(station.getStationId());
+        sysUser.setUsername(username);
+        sysUser.setPassword(bCryptPasswordEncoder.encode(password));
+
+        int userId = sysUserMapper.save(sysUser);
+
+        sysUserMapper.addRoles(sysUser.getId(),3);
+
+        for(int stationId:stationList){
+            sysUserMapper.addStation(sysUser.getId(),stationId);
+        }
+
+
     }
 
+    /**
+     * 展示管理员用户
+     * @return 用户列表
+     */
     @Override
+    @Transactional
     public List allsysUser() {
 
-        List<SysUser> list = sysUserMapper.allsysUser();
+        List<SysUser> sysUsers = sysUserMapper.allsysUser();
 
-        List<Map> list1 = new ArrayList<Map>();
+        List<Map> resultList = new ArrayList<Map>();
 
-        for(SysUser sysUser:list){
 
-            sysUser.setRoles(sysUserMapper.sysRoles("3"));
+        for(SysUser sysUser:sysUsers){
+
+            List<String> stationName = new ArrayList<>();
+
+            sysUser.setRoles(sysUserMapper.sysRoles(3));
+
+            List<SysUserStation> sysUserStations = stationMapper.oneSysUserStation(sysUser.getId());
+            for(SysUserStation sysUserStation:sysUserStations){
+                Station station = stationMapper.oneStation(sysUserStation.getStation_id());
+                stationName.add(station.getStationName());
+            }
+
             String add =String.valueOf(sysUser.getSadd());
             String delete =String.valueOf(sysUser.getSdelete());
             String update =String.valueOf(sysUser.getSupdate());
+            String stationUpdate =String.valueOf(sysUser.getSsupdate());
             String id = String.valueOf(sysUser.getId());
 
-            Map<String,String> map = new HashMap<>();
+            Map resultMap = new HashMap();
 
-            map.put("username",sysUser.getUsername());
-            map.put("sadd",add);
-            map.put("sdelete",delete);
-            map.put("supdate",update);
-            map.put("id",id);
-            list1.add(map);
+            resultMap.put("username",sysUser.getUsername());
+            resultMap.put("sadd",add);
+            resultMap.put("sdelete",delete);
+            resultMap.put("supdate",update);
+            resultMap.put("ssupdate",stationUpdate);
+            resultMap.put("id",id);
+            resultMap.put("stationName",stationName);
+            resultList.add(resultMap);
         }
 
-        return list1;
+        return resultList;
     }
-
+    //修改权限 增加
     @Override
     public void setAdd(Integer id) {
-
         SysUser sysUser = sysUserMapper.findById(id);
-
         if(sysUser.getSadd().equals("1")){
             sysUserMapper.setAdd("0",id);
         }else {
             sysUserMapper.setAdd("1",id);
         }
-
-
     }
-
+    //修改权限 删除
     @Override
     public void setDelete(Integer id) {
         SysUser sysUser = sysUserMapper.findById(id);
@@ -75,7 +129,7 @@ public class SysUserServiceImpl implements SysUserService {
             sysUserMapper.setDelete("1",id);
         }
     }
-
+    //修改权限 更新物体
     @Override
     public void setUpdate(Integer id) {
         SysUser sysUser = sysUserMapper.findById(id);
@@ -85,6 +139,22 @@ public class SysUserServiceImpl implements SysUserService {
         }else {
             sysUserMapper.setUpdate("1",id);
         }
+    }
+    //修改权限 更新站点
+    @Override
+    public void setStationUpdate(Integer id) {
+        SysUser sysUser = sysUserMapper.findById(id);
+
+        if(sysUser.getSsupdate().equals("1")){
+            sysUserMapper.setStationUpdate("0",id);
+        }else {
+            sysUserMapper.setStationUpdate("1",id);
+        }
+    }
+
+    @Override
+    public SysUser logincheck(String username) throws UsernameNotFoundException {
+        return sysUserMapper.findByUsername(username);
     }
 
 }

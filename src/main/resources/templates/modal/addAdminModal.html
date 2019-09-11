@@ -1,0 +1,123 @@
+<div class="modal-dialog" style="width: 300px">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">新增管理员</h4>
+        </div>
+        <div style="float: right;width: 100px;height: 210px"><div>已选择站点</div><textarea id="selected" style="width: 100px;height: 190px" rows="8" readonly></textarea></div>
+        <div style="width: 250px"><div class="modal-body" style="width: 250px">请输入用户名:<input type="text" id="username" /></div>
+        <div class="modal-body" style="width: 250px">请输入密码:  <input type="password" id="password" /></div>
+        <div class="modal-body" style="width: 250px">请选择管理的线路：<select style="width: 172px;height: 25px" id="line"></select></div>
+            <div class="modal-body" style="width: 250px">请选择管理的站点：<select style="width: 172px;height: 25px" id="station"><option>请选择站点</option></select></div></div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-primary" onclick="addAdmin()" >确定</button>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+        var doption = document.createElement("option");
+        $(doption).text("请选择线路");
+        $("#line").append(doption);
+        $.ajax({
+            // contentType: 'application/json;charset=UTF-8',
+            url:"http://localhost:8080/admin/allLine",
+            type:"get",
+            dataType:"json",
+            success:function (data) {
+                for(var i=0;i<data.length;i++){
+                    var option = document.createElement("option");
+                    $(option).text(data[i].lineName);
+                    $('#line').append(option);
+                }
+            }
+        });
+
+        $('#line').change(function () {
+            $("#station").empty();
+            var doption = document.createElement("option");
+            $(doption).text("请选择站点");
+            $("#station").append(doption);
+
+            $.ajax({
+                // contentType: 'application/json;charset=UTF-8',
+                url:"http://localhost:8080/admin/allLine",
+                type:"get",
+                dataType:"json",
+                success:function (data) {
+
+                    var obj = document.getElementById('line');
+                    var index = obj.selectedIndex;
+                    var text = obj.options[index].text;
+                    for(var i=0;i<data.length;i++){
+                        if(data[i].lineName===text){
+                            for(var j=0;j<data[i].station.length;j++){
+                                var option = document.createElement("option");
+                                $(option).text(data[i].station[j].stationName);
+                                $('#station').append(option);
+                            }
+                        }
+                    }
+                }
+            });
+        });
+        $("#station").change(function () {
+            var obj = document.getElementById('station');
+            var index = obj.selectedIndex;
+            var text = obj.options[index].text;
+            var str =$("#selected").val();
+            var split = str.split(",");
+            for(var i=0;i<split.length-1;i++){
+                if(split[i]===text){
+                    alert("该站点已存在");
+                    return;
+                }
+            }
+            $("#selected").val(str+text+",");
+        })
+
+    });
+
+    function addAdmin() {
+
+        if($("#username").val()===''){
+            alert("请输入用户名");
+            return;
+        }
+        if($("#password").val()===''){
+            alert("请输入密码");
+            return;
+        }
+
+        var username = $("#username").val();
+        var password = $("#password").val();
+        var obj = document.getElementById('station');
+        var index = obj.selectedIndex;
+        //var stationName = obj.options[index].text;
+
+        var selected = $("#selected").val();
+        var split = selected.split(",");
+        var stationList = [];
+        for(var i=0;i<split.length-1;i++){
+            stationList.push(split[i])
+        }
+
+        $.ajax({
+            // contentType: 'application/json;charset=UTF-8',
+            url:"http://localhost:8080/sys/register",
+            data:{'username':username,"password":password,"stationName":stationList},
+            type:"POST",
+            dataType:"json",
+            success:function (data) {
+                alert(data.msg);
+                $('#addAdminModal').modal('hide');
+                window.location.reload();
+            }
+        })
+
+    }
+</script>

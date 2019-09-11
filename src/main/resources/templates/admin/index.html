@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <!--引入统一头-->
 <head th:include="import/head :: head"></head>
+
 <body class="fixed-sidebar full-height-layout" style="min-width: 1550px;overflow: visible">
 <div id="wrapper">
     <!--左侧导航开始-->
@@ -9,15 +10,16 @@
         <div class="sidebar-collapse">
             <ul class="nav" id="side-menu">
                 <li class="nav-header">
-                    <div class="dropdown profile-element">
+                    <div class="dropdown profile-element" sec:authorize="isAuthenticated()">
                         <span class="clear" >
-                                <strong class="font-bold">您好！管理员</strong>
+                                <strong class="font-bold" >您好！<span sec:authentication="name"></span></strong>
+
                         </span>
                     </div>
                     <div class="logo-element">3D</div>
                 </li>
-<!--                <li sec:authorize="hasRole('ROLE_ADMIN')">-->
-                <li>
+                <li sec:authorize="hasRole('ROLE_ADMIN')">
+<!--                <li>-->
                     <a  class="J_menuItem" th:href="@{/admin/lineManage}" title="线路管理">
                         <i class="fa fa-users"></i>
                         <span class="nav-label">线路管理</span>
@@ -27,10 +29,11 @@
                         <span class="nav-label">权限管理</span>
                     </a>
                 </li>
-                <li sec:authorize="hasRole('')">
-                    <a  class="J_menuItem" th:href="@{/admin}" title="线路管理">
+                <li sec:authorize="hasRole('ROLE_MANAGE')">
+<!--                <li>-->
+                    <a  class="J_menuItem" th:href="@{/admin/stationManage}" title="站点管理">
                         <i class="fa fa-users"></i>
-                        <span class="nav-label"></span>
+                        <span class="nav-label">站点管理</span>
                     </a>
                 </li>
             </ul>

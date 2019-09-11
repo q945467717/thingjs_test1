@@ -18,5 +18,10 @@
 <!--            <result property="name" column="name"/>-->
 <!--        </collection>-->
 <!--    </resultMap>-->
+<insert id="save" parameterType="sysUser" useGeneratedKeys="true" keyProperty="id">
+    insert into sys_user(username,password) values(#{username},#{password})
+</insert>
+
+
 
 </mapper>

@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,9 +31,9 @@ public class CustomUserService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("用户名不存在");
         }
-        System.out.println("s:"+s);
-        System.out.println("username:"+user.getUsername()+";password:"+user.getPassword());
-        System.out.println(user.getId());
+        //System.out.println("s:"+s);
+        //System.out.println("username:"+user.getUsername()+";password:"+user.getPassword());
+        //System.out.println(user.getId());
 
         List<SysRole> list = sysUserMapper.sysRoles(user.getId());
         user.setRoles(list);

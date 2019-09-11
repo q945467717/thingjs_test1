@@ -2,6 +2,8 @@ package com.zl.service;
 
 import com.zl.model.Station;
 
+import java.util.List;
+
 public interface StationService {
 
     void addStation(int lineId,String stationName,String sceneUrl);
@@ -11,5 +13,9 @@ public interface StationService {
     void updateStation(int stationId,String newStationName,String sceneId);
 
     Station oneStation(int stationId);
+
+    List<Station> adminStations(int userId);
+
+    void  deleteStationRole(int userId,Integer stationId);
 
 }

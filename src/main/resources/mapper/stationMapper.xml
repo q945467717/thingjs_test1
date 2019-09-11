@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zl.mapper.StationMapper">
+
+<!--    <select id="lineList" resultMap="selectLine">-->
+<!--    select * from lineinfo-->
+<!--</select>-->
+<!--    <select id="selectStation" parameterType="int" resultMap="selectThings">-->
+<!--        select * from stationinfo where lineId=#{id}-->
+<!--    </select>-->
+<!--    <select id="selectThings" parameterType="int" resultType="Things">-->
+<!--        select * from thingsinfo where StationId=#{stationId}-->
+<!--    </select>-->
+<!--    <resultMap id="selectLine" type="Line">-->
+<!--        <id property="id" column="id"/>-->
+<!--        <result property="lineName" column="lineName"/>-->
+<!--        <collection property="station" ofType="Station" select="selectStation" column="id">-->
+<!--            <id property="lineId" column="lineId"/>-->
+<!--            <result property="stationId" column="stationId"/>-->
+<!--            <result property="stationName" column="stationName"/>-->
+<!--            <result property="sceneId" column="sceneId"/>-->
+<!--        </collection>-->
+<!--    </resultMap>-->
+<!--    <resultMap id="selectThings" type="Station">-->
+<!--        <id property="stationId" column="stationId"/>-->
+<!--        <result property="stationName" column="stationName"/>-->
+<!--        <result property="lineId" column="lineId"/>-->
+<!--        <result property="sceneId" column="sceneId"/>-->
+<!--        <collection property="things" ofType="Things" select="selectThings" column="stationId">-->
+<!--            <id property="id" column="id"/>-->
+<!--            <result property="tname" column="tname"/>-->
+<!--            <result property="tposition" column="tposition"/>-->
+<!--            <result property="tid" column="tid"/>-->
+<!--            <result property="tgroup" column="tgroup"/>-->
+<!--            <result property="StationId" column="StationId"/>-->
+<!--            <result property="tcamera" column="tcamera"/>-->
+<!--        </collection>-->
+<!--    </resultMap>-->
+
+
+    <select id="oneStation" parameterType="int" resultMap="selectStation">
+        select * from stationinfo where  stationId = #{stationId}
+    </select>
+    <select id="selectThings" parameterType="int" resultType="Things">
+        select * from thingsinfo where StationId=#{stationId}
+    </select>
+    <resultMap id="selectStation" type="Station">
+        <id property="stationId" column="stationId"/>
+        <result property="stationName" column="stationName"/>
+        <result property="lineId" column="lineId"/>
+        <result property="sceneId" column="sceneId"/>
+        <collection property="things" ofType="Things" select="selectThings" column="stationId">
+            <id property="id" column="id"/>
+            <result property="tname" column="tname"/>
+            <result property="tposition" column="tposition"/>
+            <result property="tid" column="tid"/>
+            <result property="tgroup" column="tgroup"/>
+            <result property="StationId" column="StationId"/>
+            <result property="tcamera" column="tcamera"/>
+        </collection>
+    </resultMap>
+
+</mapper>
