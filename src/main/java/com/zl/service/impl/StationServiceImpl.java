@@ -38,7 +38,7 @@ public class StationServiceImpl implements StationService {
     }
 
     @Override
-    public Station oneStation(int stationId) {
+    public Station oneStation(Integer stationId) {
         return stationMapper.oneStation(stationId);
     }
 

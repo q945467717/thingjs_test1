@@ -35,7 +35,7 @@ public class ThingsServiceImpl implements ThingsService {
     }
 
     @Override
-    public Things oneThing(int id) {
+    public Things oneThing(Integer id) {
         return thingsMapper.oneThing(id);
     }
 }

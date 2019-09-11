@@ -87,7 +87,7 @@ public class AdminController {
     }
     //去新增物体模态框
     @RequestMapping("/toAddThing")
-    public String toAddThing(String id, Model model){
+    public String toAddThing(Integer id, Model model){
         model.addAttribute("id",id);
         return "modal/addThingModal";
     }
@@ -99,7 +99,7 @@ public class AdminController {
     }
     //去修改站点名称模态框
     @RequestMapping("/toUpdateStation")
-    public String toUpdateStation(int id, Model model){
+    public String toUpdateStation(Integer id, Model model){
        // model.addAttribute("id",id);
         Station station = stationService.oneStation(id);
         model.addAttribute("station",station);
@@ -107,7 +107,7 @@ public class AdminController {
     }
     //去修改物体名称模态框
     @RequestMapping("/toUpdateThing")
-    public String toUpdateThing(int id, Model model){
+    public String toUpdateThing(Integer id, Model model){
       //  model.addAttribute("id",id);
         Things thing = thingsService.oneThing(id);
         model.addAttribute("thing",thing);
@@ -127,7 +127,7 @@ public class AdminController {
     }
     //去删除物体模态框
     @RequestMapping("/toDeleteThing")
-    public String toDeleteThing(int id, Model model){
+    public String toDeleteThing(Integer id, Model model){
         model.addAttribute("id",id);
         return "modal/deleteThingModal";
     }
@@ -276,7 +276,7 @@ public class AdminController {
 
     @ResponseBody
     @RequestMapping("/AddThing")
-    public String addThing(String tid, String tname,String tposition,String tgroup,String tcamera,int stationId){
+    public String addThing(String tid, String tname,String tposition,String tgroup,String tcamera,Integer stationId){
 
         Things things = new Things();
         things.setStationId(stationId);

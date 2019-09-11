@@ -14,5 +14,5 @@ public interface ThingsService {
 
     void updateThing(int id,String tname,String tposition,String tid,String tgroup,String tcamera);
 
-    Things oneThing(int id);
+    Things oneThing(Integer id);
 }

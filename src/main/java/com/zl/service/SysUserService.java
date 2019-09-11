@@ -21,5 +21,7 @@ public interface SysUserService {
 
     SysUser logincheck(String username);
 
+    void deleteAdmin(Integer userId);
+
 
 }

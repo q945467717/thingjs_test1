@@ -49,4 +49,13 @@ public interface SysUserMapper {
     @Delete("delete from user_station where user_id=#{userId} and station_id=#{stationId}")
     void deleteStationRole(int userId,Integer stationId);
 
+    @Delete("delete from sys_user where id=#{userId}")
+    void deleteAdmin(Integer userId);
+
+    @Delete("delete from user_station where user_id=#{userId}")
+    void deleteStationRoles(Integer userId);
+
+    @Delete("delete from sys_user_roles where sys_user_id=#{userId}")
+    void deleteUserRoles(Integer userId);
+
 }

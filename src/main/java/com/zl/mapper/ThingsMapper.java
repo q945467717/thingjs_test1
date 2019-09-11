@@ -24,5 +24,5 @@ public interface ThingsMapper {
     void updateThing(int id,String tname,String tposition,String tid,String tgroup,String tcamera);
 
     @Select("select * from thingsinfo where id =#{id}")
-    Things oneThing(int id);
+    Things oneThing(Integer id);
 }

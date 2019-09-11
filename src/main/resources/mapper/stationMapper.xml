@@ -40,10 +40,10 @@
 <!--    </resultMap>-->
 
 
-    <select id="oneStation" parameterType="int" resultMap="selectStation">
+    <select id="oneStation" parameterType="integer" resultMap="selectStation">
         select * from stationinfo where  stationId = #{stationId}
     </select>
-    <select id="selectThings" parameterType="int" resultType="Things">
+    <select id="selectThings" parameterType="integer" resultType="Things">
         select * from thingsinfo where StationId=#{stationId}
     </select>
     <resultMap id="selectStation" type="Station">

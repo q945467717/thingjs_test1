@@ -12,7 +12,7 @@ public interface StationService {
 
     void updateStation(int stationId,String newStationName,String sceneId);
 
-    Station oneStation(int stationId);
+    Station oneStation(Integer stationId);
 
     List<Station> adminStations(int userId);
 

@@ -3,32 +3,31 @@
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">删除站点</h4>
+            <h4 class="modal-title" id="myModalLabel">删除管理员</h4>
         </div>
-        <div class="modal-body">确定要删除该站点吗？</div>
+        <div class="modal-body">确定要删除该管理员吗？</div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            <button type="button" th:id="${id}" class="btn btn-primary" onclick="stationDelete(this.id)" >确定</button>
+            <!--/*@thymesVar id="userId" type="java"*/-->
+            <button type="button" th:id="${userId}" class="btn btn-primary" onclick="adminDelete(this.id)" >确定</button>
         </div>
     </div>
 </div>
 </html>
 
 <script>
-    function stationDelete(id) {
-        console.log(id)
+    function adminDelete(id) {
+        console.log(id);
             $.ajax({
                 // contentType: 'application/json;charset=UTF-8',
-                url: "/admin/DeleteStation",
-                data: {'stationId': id},
+                url: "/sys/DeleteAdmin",
+                data: {'userId': id},
                 type: "POST",
                 dataType: "text",
                 success: function (data) {
-                    alert(data);
-                    $('#deleteStationModal').modal('hide')
+                    alert(data.data);
+                    $('#deleteStationModal').modal('hide');
                     window.location.reload();
-                },
-                error: function () {
                 }
             });
     }

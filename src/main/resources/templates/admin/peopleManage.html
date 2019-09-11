@@ -20,7 +20,7 @@
                 for(var i=0;i<data.data.length;i++){
                     html+="<tr><td style='width: 200px'>"+data.data[i].username+"</td><td>"+data.data[i].stationName+"</td><td style='width:500px'><div style='float:left;width: 100px'><input type='checkbox' id='a"+i+"' value='"+data.data[i].id+"'>添加物体</div><div style='float:left;width: 100px'><input type='checkbox' id='d"+i+"' value='"+data.data[i].id+"'>删除物体</div><div style='float:left;width: 120px'><input type='checkbox' id='u"+i+"' value='"+data.data[i].id+"'>修改物体名称</div><div style='float:left;width: 120px'><input type='checkbox' id='us"+i+"' value='"+data.data[i].id+"'>修改站点名称</div></td>" +
                         "<td style='width: 200px'><a data-toggle=\"modal\" data-target=\"#updateThingModal\" class=\"btn btn-sm btn-warning\" onclick=\"openModal('/admin/toUpdateThing','updateThingModal',this.id)\">修改</a>" +
-                        "<a data-toggle='modal' data-target='#deleteThingModal' class='btn btn-sm btn-danger' onclick=\"openModal('/admin/toDeleteThing','deleteThingModal',this.id)\">删除</a></td><tr>"
+                        "<a id='"+authority[i].id+"' data-toggle='modal' data-target='#deleteAdminModal' class='btn btn-sm btn-danger' onclick=\"openModal('/sys/toDeleteAdmin','deleteAdminModal',this.id)\">删除</a></td><tr>"
                 }
                 html+="</tbody></table>";
                 document.getElementById("administrator").innerHTML = html;
@@ -105,6 +105,8 @@
 
 <!--添加管理员模态框-->
 <div class="modal fade" id="addAdminModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<!--删除管理员模态框-->
+<div class="modal fade" id="deleteAdminModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 <script th:replace="import/script :: script"></script>
 </body>
 </html>

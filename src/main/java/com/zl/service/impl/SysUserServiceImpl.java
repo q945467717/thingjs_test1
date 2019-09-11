@@ -59,8 +59,6 @@ public class SysUserServiceImpl implements SysUserService{
         for(int stationId:stationList){
             sysUserMapper.addStation(sysUser.getId(),stationId);
         }
-
-
     }
 
     /**
@@ -151,10 +149,20 @@ public class SysUserServiceImpl implements SysUserService{
             sysUserMapper.setStationUpdate("1",id);
         }
     }
-
+    //检查用户名是否重复
     @Override
     public SysUser logincheck(String username) throws UsernameNotFoundException {
         return sysUserMapper.findByUsername(username);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAdmin(Integer userId) {
+        sysUserMapper.deleteAdmin(userId);
+
+        sysUserMapper.deleteStationRoles(userId);
+
+        sysUserMapper.deleteUserRoles(userId);
     }
 
 }

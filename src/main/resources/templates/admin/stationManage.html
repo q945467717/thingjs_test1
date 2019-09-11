@@ -28,7 +28,7 @@
                         "    <div class=\"panel-heading\" style=\"background:#5599FF; color:#FFF\"><h4 class=\"panel-title\">" +
                         "        <a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#"+i+"\">"+data.data[i].stationName+"" +
                         "            <span style='margin-left: 85%;display: inline'>"+
-                        "               <a id = '"+data.data[i].stationName+"' data-toggle=\"modal\" data-target=\"#addStationModal\" class=\"btn btn-sm btn-success sadd\" onclick=\"openModal('/admin/toAddStation','addStationModal',this.id)\">添加物体</a>" +
+                        "               <a id = '"+data.data[i].stationId+"' data-toggle=\"modal\" data-target=\"#addThingModal\" class=\"btn btn-sm btn-success sadd\" onclick=\"openModal('/admin/toAddThing','addThingModal',this.id)\">添加物体</a>" +
                         "               <a id = '"+data.data[i].stationId+"' data-toggle=\"modal\" data-target=\"#updateStationModal\" class=\"btn btn-sm btn-warning ssupdate\" onclick=\"openModal('/admin/toUpdateStation','updateStationModal',this.id)\">修改名称</a>" +
                         // "               <a id = '"+data.data[i].stationId+"' data-toggle=\"modal\" data-target=\"#deleteStationModal\" class=\"btn btn-sm btn-danger\"  onclick=\"openModal('/admin/toDeleteStation','deleteStationModal',this.id)\">删除站点</a>
                         " </span></a></h4></div>" +
@@ -44,17 +44,14 @@
                     html+="</tbody></table></div></div></div>";
                 }
                 document.getElementById("stationDetail").innerHTML = html;
+
+
+
             }
         });
-
         if(supdate===0){
             $(".supdate").attr({
                 "onclick":"openModal('/admin/noAuthority','noAuthorityModal')",
-                "data-target":"#noAuthorityModal"
-            });
-        }else{
-            $(".supdate").attr({
-                "onclick":"openModal('/admin/toUpdateThing','updateThingModal,this.id')",
                 "data-target":"#noAuthorityModal"
             });
         }
@@ -63,20 +60,10 @@
                 "onclick":"openModal('/admin/noAuthority','noAuthorityModal')",
                 "data-target":"#noAuthorityModal"
             });
-        }else{
-            $(".sadd").attr({
-                "onclick":"openModal('/admin/toUpdateThing','updateThingModal,this.id')",
-                "data-target":"#noAuthorityModal"
-            });
         }
         if(sdelete===0){
             $(".sdelete").attr({
                 "onclick":"openModal('/admin/noAuthority','noAuthorityModal')",
-                "data-target":"#noAuthorityModal"
-            });
-        }else{
-            $(".sdelete").attr({
-                "onclick":"openModal('/admin/toDeleteThing','deleteThingModal,this.id')",
                 "data-target":"#noAuthorityModal"
             });
         }
@@ -85,12 +72,8 @@
                 "onclick":"openModal('/admin/noAuthority','noAuthorityModal')",
                 "data-target":"#noAuthorityModal"
             });
-        }else{
-            $(".ssupdate").attr({
-                "onclick":"openModal('/admin/toUpdateStation','updateStationModal,this.id')",
-                "data-target":"#noAuthorityModal"
-            });
         }
+
     });
 </script>
 <body>
@@ -110,8 +93,8 @@
 <div class="modal fade" id="updateThingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 <!--修改站点名称模态框-->
 <div class="modal fade" id="updateStationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
-<!--删除站点模态框-->
-<div class="modal fade" id="deleteStationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<!--添加物体模态框-->
+<div class="modal fade" id="addThingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 <!--删除物体模态框-->
 <div class="modal fade" id="deleteThingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 <!--没有权限模态框-->

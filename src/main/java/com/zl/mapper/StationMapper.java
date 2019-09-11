@@ -18,7 +18,7 @@ public interface StationMapper {
     void updateStation(int stationId,String newStationName,String sceneId);
 
     //@Select("select * from stationinfo where stationId=#{stationId}")
-    Station oneStation(int stationId);
+    Station oneStation(Integer stationId);
 
     @Select("select * from stationinfo where stationName=#{stationName}")
     Station oneStationByName(String stationName);

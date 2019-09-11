@@ -8,6 +8,7 @@ import com.zl.service.SysUserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -39,9 +40,34 @@ public class SysUserController {
 
     //去添加管理员模态框
     @RequestMapping("/toAddAdmin")
-    public String toAddAdminModel(){
+    public String toAddAdmin(){
         return "/modal/addAdminModal";
     }
+
+    //去删除管理员模态框
+    @RequestMapping("/toDeleteAdmin")
+    public String toDeleteAdmin(Integer id , Model model){
+
+        model.addAttribute("userId",id);
+
+        return "/modal/deleteAdminModal";
+    }
+
+    //删除管理员接口
+    @ResponseBody
+    @RequestMapping("/DeleteAdmin")
+    public Result DeleteAdmin(Integer userId ,HttpServletResponse response){
+
+        try {
+            sysUserService.deleteAdmin(userId);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultUtil.error(0,e.getMessage());
+        }
+        return ResultUtil.success(response.getStatus(),"删除成功");
+
+    }
+
 
     //跳转到权限管理页面
     @RequestMapping("/peopleManage")
