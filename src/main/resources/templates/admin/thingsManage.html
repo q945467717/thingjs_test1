@@ -3,39 +3,6 @@
 <head th:include="import/head :: head"><title></title></head>
 <script>
 
-    function getUrlParam(name) {
-        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-        var r = window.location.search.substr(1).match(reg);
-        if (r != null) return (r[2]); return null;
-    }
-
-    $(document).ready(function s() {
-        var id = getUrlParam('id');
-        $("input:button").click(function() {
-            $(this).prev("div").attr("id",id);
-            openModal('/admin/toAddThing','addThingModal',id)
-        });
-
-        $.ajax({
-            // contentType: 'application/json;charset=UTF-8',
-            url:"http://localhost:8080/admin/stationThings",
-            data:{"stationId":id},
-            type:"get",
-            dataType:"json",
-            success:function (data) {
-                var html = "<div style='width:95%'><table class='table table-striped table-bordered' style='text-align:center'><thead><tr><th style=\"width: 30px\"><input type=\"checkbox\" id='allCheck' onclick='ckAll()'/></th>" +
-                    "<th style='text-align:center'>物体ID</th><th style='text-align:center'>物体名称</th><th style='text-align:center'>所在楼层</th><th style='text-align:center'>物体分组</th><th style='text-align:center;width: 600px'>监控</th><th style='text-align:center'>操作</th></tr></thead><tbody>";
-                for(var i=0;i<data.length;i++){
-                    html+="<tr><td style=\"width: 30px\"><input type=\"checkbox\" name='check' value='"+data[i].id+"'/></td><td>"+data[i].tid+"</td><td>"+data[i].tname+"</td><td>"+data[i].tposition+"</td><td>"+data[i].tgroup+"</td><td>"+data[i].tcamera+"</td>" +
-                        "<td><a id='"+data[i].id+"' data-toggle=\"modal\" data-target=\"#updateThingModal\" class=\"btn btn-sm btn-warning\" onclick=\"openModal('/admin/toUpdateThing','updateThingModal',this.id)\">修改</a>" +
-                        "    <a id='"+data[i].id+"' data-toggle='modal' data-target='#deleteThingModal' class='btn btn-sm btn-danger' onclick=\"openModal('/admin/toDeleteThing','deleteThingModal',this.id)\">删除</a></td><tr>"
-                }
-                html+="</tbody></table><input type=\"button\" class=\"btn btn-danger\" data-toggle=\"modal\" data-target=\"#deleteAllModal\" value=\"批量删除\" onclick=\"openModal('/admin/toDeleteAll','deleteAllModal')\"/><div>";
-                document.getElementById("detail").innerHTML = html;
-            }
-        });
-    });
-
     function ckAll(){
         var flag=document.getElementById("allCheck").checked;
         var cks=document.getElementsByName("check");
@@ -49,12 +16,42 @@
 <div class="ibox float-e-margins" >
     <div class="ibox-title">
         <h3 style="display: inline;">
-            物体信息<input type="button" class="btn btn-success" data-toggle="modal" data-target="#addThingModal" value="新增物体" style="margin-left: 80%;display: inline" /><a th:href="@{/admin/lineManage}"><button class="btn btn-warning" style="width: 100px">返回上一级</button></a>
+            物体信息<input th:id="${stationId}" type="button" class="btn btn-success" data-toggle="modal" data-target="#addThingModal" value="新增物体" style="margin-left: 80%;display: inline" onclick="openModal('/admin/toAddThing','addThingModal',this.id)"/>
+            <a th:href="@{/admin/lineManage}"><button class="btn btn-warning" style="width: 100px">返回上一级</button></a>
         </h3>
     </div>
     <!--数据展示-->
-    <div class="ibox-content" id="detail">
-<!--        <div class="panel-group"></div>-->
+    <div class="ibox-content">
+        <div style="width: 95%">
+            <table class="table table-striped table-bordered" style="text-align: center">
+                <thead>
+                <tr>
+                    <th style="width: 30px"><input type="checkbox" id="allCheck" onclick="ckAll()"/></th>
+                    <th style="text-align: center">物体ID</th>
+                    <th style="text-align: center">物体名称</th>
+                    <th style="text-align: center">所在楼层</th>
+                    <th style="text-align: center">物体类型</th>
+                    <th style="text-align: center;width: 600px">监控</th>
+                    <th style="text-align: center">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="things:${thingsList}">
+                    <td style="width: 30px"><input type="checkbox" name="check" th:value="${things.id}"></td>
+                    <td th:text="${things.tid}">tid</td>
+                    <td th:text="${things.tname}">tname</td>
+                    <td th:text="${things.tposition}">tposition</td>
+                    <td th:text="${things.tgroup}">tgroup</td>
+                    <td th:text="${things.tcamera}">tcamera</td>
+                    <td>
+                        <a th:id="${things.id}" data-toggle="modal" data-target="#updateThingModal" class="btn btn-sm btn-warning" onclick="openModal('/admin/toUpdateThing','updateThingModal',this.id)">修改</a>
+                        <a th:id="${things.id}" data-toggle="modal" data-target="#deleteThingModal" class="btn btn-sm btn-danger" onclick="openModal('/admin/toDeleteThing','deleteThingModal',this.id)">删除</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <input type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAllModal" value="批量删除" onclick="openModal('/admin/toDeleteAll','deleteAllModal')"/>
+        </div>
     </div>
 </div>
 <!--添加物体模态框-->

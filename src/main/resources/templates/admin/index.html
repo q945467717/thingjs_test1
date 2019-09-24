@@ -1,97 +1,182 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<!--引入统一头-->
-<head th:include="import/head :: head"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="UTF-8">
+        <!--重要meta, 必须!-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0,shrink-to-fit=no"/>
+        <title>地铁线路总览</title>
+        <link rel="stylesheet" href="/static/css/bootstrap.min.css" type="text/css"/>
+        <link th:href="@{/static/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+        <script src="/static/js/jquery-3.4.1.min.js"></script>
+        <script src="/static/js/bootstrap.min.js"></script>
+        <script th:src="@{/static/js/plugins/sweetalert/sweetalert.min.js}"></script>
 
-<body class="fixed-sidebar full-height-layout" style="min-width: 1550px;overflow: visible">
-<div id="wrapper">
-    <!--左侧导航开始-->
-    <nav class="navbar-default navbar-static-side" role="navigation">
-        <div class="sidebar-collapse">
-            <ul class="nav" id="side-menu">
-                <li class="nav-header">
-                    <div class="dropdown profile-element" sec:authorize="isAuthenticated()">
-                        <span class="clear" >
-                                <strong class="font-bold" >您好！<span sec:authentication="name"></span></strong>
+        <style>
+            .point{
+                fill-opacity: 0.5;
+                fill:deepskyblue;
+                cursor:pointer;
+            }
+        </style>
+    </head>
+    <body>
+    <div id="mySubway"></div>
+    <div style="padding: 10px 10px 10px;position: absolute;z-index: 10000;width: 600px">
+<!--        <form class="bs-example bs-example-form" role="form">-->
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <input type="text" id="stationName" class="form-control" placeholder="请输入需要搜索的站点名称">
+                        <span class="input-group-btn">
+						<button class="btn btn-info search" type="button" id="search">
+							搜索
+						</button>
+					    </span>
 
-                        </span>
-                    </div>
-                    <div class="logo-element">3D</div>
-                </li>
-                <li sec:authorize="hasRole('ROLE_ADMIN')">
-<!--                <li>-->
-                    <a  class="J_menuItem" th:href="@{/admin/lineManage}" title="线路管理">
-                        <i class="fa fa-users"></i>
-                        <span class="nav-label">线路管理</span>
-                    </a>
-                    <a class="J_menuItem" th:href="@{/sys/peopleManage}" title="权限管理">
-                        <i class="fa fa-users"></i>
-                        <span class="nav-label">权限管理</span>
-                    </a>
-                </li>
-                <li sec:authorize="hasRole('ROLE_MANAGE')">
-<!--                <li>-->
-                    <a  class="J_menuItem" th:href="@{/admin/stationManage}" title="站点管理">
-                        <i class="fa fa-users"></i>
-                        <span class="nav-label">站点管理</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    <!--左侧导航结束-->
-    <!--右侧部分开始-->
-    <div id="page-wrapper" class="gray-bg dashbard-1">
-        <div class="row border-bottom ">
-            <nav class="navbar navbar-static-top rowbj" role="navigation" style="margin-bottom: 0">
-                <div class="navbar-header ">
-                    <a id="miniLink" class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#">
-                        <i class="fa fa-bars"></i> </a>
-                    <div class="navbar-form-custom">
-                        <div class="form-group">
-                            <h1>3D可视化场景管理后台</h1>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
-        <!--选项卡TAB-->
-        <div class="row content-tabs">
-            <nav class="page-tabs J_menuTabs" id="tabNav">
-                <div class="page-tabs-content" >
-                    <a href="javascript:" class="active J_menuTab" data-id="hello">首页</a>
-                </div>
-            </nav>
-            <div class="btn-group roll-nav roll-right">
-                <button class="dropdown J_tabClose" data-toggle="dropdown">选项卡操作</button>
-                <ul role="menu" class="dropdown-menu dropdown-menu-right">
-                    <li><a id="refreshTab">刷新当前选项卡</a></li>
-                    <li class="J_tabCloseAll"><a>关闭全部</a></li>
-                    <li class="J_tabCloseOther"><a>关闭其他</a></li>
-                </ul>
-                <a id="changePasswordButton" type="button" class="roll-nav roll-right J_tabExit" data-toggle="modal"
-                   data-target="#editPasswordModal"
-                   onclick="openModal('/admin/toChangePassword','editPasswordModal')">
-                    修改密码
-                </a>
-            </div>
-            <a href="/logout" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
-        </div>
-        <!--用来切换的iframe-->
-        <div class="row J_mainContent" id="content-main">
-            <iframe class="J_iframe" id="iframe0" name="iframe0" width="100%" height="100%" th:src="@{/admin/hello}"
-                    frameborder="0"
-                    data-id="hello">
-            </iframe>
-        </div>
-        <div class="footer">
-            <div class="pull-right"></div>
-        </div>
+                    </div><!-- /input-group -->
+
+                </div><!-- /.col-lg-6 -->
+            </div><!-- /.row -->
+<!--        </form>-->
     </div>
-    <!--右侧部分结束-->
-</div>
-<div class="modal inmodal fade" id="editPasswordModal" tabindex="-1" role="dialog" aria-hidden="true"></div>
-<!--引入统一JS-->
-<script th:replace="import/script :: script"></script>
-</body>
+    <div style="font-size: 15px;position: absolute;padding: 5px 10px;z-index: 10000;width: 150px;top: 60px" >
+        <a href="javascript:void(0);" class="list-group-item active">
+            我管理的站点
+        </a>
+        <a href="javascript:void(0);" class="list-group-item search authority" sec:authorize="hasRole('ROLE_ADMIN')">全部站点</a>
+
+        <a th:each="station:${stationList}" href="javascript:void(0);" class="list-group-item search authority"  th:text="${station.stationName}" sec:authorize="hasRole('ROLE_MANAGE')"></a>
+    </div>
+
+    <div style="padding: 10px 20px;position: absolute;z-index: 10000;left: 300px">
+        <a class="btn btn-info" type="button" th:href="@{/admin/backstageIndex}">进入后台管理</a>
+    </div>
+
+    <div style="padding: 10px 20px;position: absolute;z-index: 10000;left: 420px">
+        <a class="btn btn-danger" type="button" th:href="@{/logout}">退出</a>
+    </div>
+
+
+
+    <script src="https://webapi.amap.com/subway?v=1.0&key=565f4428b3187dfafb7274ddcfa50eb8&callback=cbk"></script>
+    <script type="text/javascript">
+
+        window.cbk = function(){
+            var mySubway = subway("mySubway", {
+                adcode: 5101,
+                theme:"colorful"
+                //easy: 2
+            });
+
+            mySubway.event.on("subway.complete", function() {
+
+                $(".search").click(function () {
+
+                    $(".point").remove();
+
+                    if($(this).attr("id")==="search"){
+                        var name = $("input#stationName").val();
+                    }else {
+                        var name = $(this).text();
+                    }
+
+                    mySubway.stationSearch(name,function (d) {
+
+                        for(var i =0;i<d.stationList.length;i++){
+                            mySubway.addCustomNode(d.stationList[i].id,{
+                                type:"circle",
+                                r:15,
+                                customClass:"point"
+                            })
+                        }
+                    });
+                })
+            });
+
+            //点击站点，显示此站点的信息窗体
+            mySubway.event.on("stationName.touch", function(ev, info) {
+                var id = info.id;
+                mySubway.stopAnimation();
+                mySubway.addInfoWindow(id, {});
+                var center = mySubway.getStCenter(id);
+                mySubway.setCenter(center);
+            });
+
+            //点击线路名，高亮此线路
+            mySubway.event.on("lineName.touch", function(ev, info) {
+                mySubway.showLine(info.id);
+                var select_obj = qs('#g-select');
+                mySubway.setFitView(select_obj);
+                var center = mySubway.getSelectedLineCenter();
+                mySubway.setCenter(center);
+            });
+
+            mySubway.event.on("station.touch", function(ev,info) {
+
+                var count =0;
+                var textList =[];
+
+                if($(".authority").text()==="全部站点"){
+                    window.location.href="../admin/reception?name="+info.name;
+                }else {
+
+                    $(".authority").each(function () {
+
+                        textList.push($(this).text());
+
+                        if(info.name===$(this).text()){
+                            window.location.href="../admin/reception?name="+info.name;
+                        }else {
+                            count+=1;
+                        }
+                    });
+                    if(count===textList.length){
+                        swal({
+                            title: "无权查看该场景",
+                            type: "error"
+                        });
+                    }
+                }
+
+
+
+
+            });
+
+            //点击空白, 关闭infowindow
+            mySubway.event.on("subway.touch", function() {
+                mySubway.clearInfoWindow();
+            });
+
+            //设置起点
+            mySubway.event.on("startStation.touch", function(ev, info) {
+                mySubway.stopAnimation();
+                mySubway.clearInfoWindow();
+                mySubway.setStart(info.id, {});
+                startInfo = info;
+                route();
+            });
+
+            //设置终点
+            mySubway.event.on("endStation.touch", function(ev, info) {
+                mySubway.stopAnimation();
+                mySubway.clearInfoWindow();
+                mySubway.setEnd(info.id, {});
+                endInfo = info;
+                route();
+            });
+
+            //路线规划
+            var startInfo = {},
+                endInfo = {};
+            function route() {
+                if (startInfo.id && endInfo.id) {
+                    mySubway.route(startInfo.id, endInfo.id, {});
+                    startInfo = {};
+                    endInfo = {};
+                }
+            }
+        };
+    </script>
+    </body>
 </html>

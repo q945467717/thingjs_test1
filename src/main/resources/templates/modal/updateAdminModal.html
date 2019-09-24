@@ -5,8 +5,8 @@
     ul{
         margin:0;
         padding:0;
-        height: 85px;
-        max-height: 85px;
+        height: 69px;
+        max-height: 69px;
         overflow-y:scroll
     }
 </style>
@@ -17,7 +17,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title" id="myModalLabel">管理的站点</h4>
         </div>
-        <div style="float: right;width: 100px;height: 115px"><div>已选择站点</div><div style="border:1px solid #0C0C0C;height: 90px;max-height: 88px"><ul id="select"></ul></div></div>
+        <div style="float: right;width: 100px;height: 115px"><div>已选择站点<br>(点击名称移除)</div><div style="border:1px solid #0C0C0C;height: 71px;max-height: 71px"><ul id="select"><li th:each="station:${stationList}" th:text="${station.stationName}" onclick="$(this).remove()"></li></ul></div></div>
         <div style="width: 250px">
             <div class="modal-body" style="width: 200px">请选择管理的线路：<select style="width: 172px;height: 25px" id="line"></select></div>
             <div class="modal-body" style="width: 200px">请选择管理的站点：<select style="width: 172px;height: 25px" id="station"><option>请选择站点</option></select></div></div>
@@ -38,7 +38,7 @@
         $("#line").append(doption);
         $.ajax({
             // contentType: 'application/json;charset=UTF-8',
-            url:"http://localhost:8080/admin/allLine",
+            url:"/admin/allLine",
             type:"get",
             dataType:"json",
             success:function (data) {
@@ -58,7 +58,7 @@
 
             $.ajax({
                 // contentType: 'application/json;charset=UTF-8',
-                url:"http://localhost:8080/admin/allLine",
+                url:"/admin/allLine",
                 type:"get",
                 dataType:"json",
                 success:function (data) {
@@ -101,8 +101,6 @@
 
     function updateAdmin(id) {
 
-        console.log(id);
-
         var obj = document.getElementById('station');
         var index = obj.selectedIndex;
 
@@ -113,7 +111,7 @@
 
         $.ajax({
             // contentType: 'application/json;charset=UTF-8',
-            url:"http://localhost:8080/sys/updateAdmin",
+            url:"/sys/updateAdmin",
             data:{'userId':id,"stationName":stationList},
             type:"POST",
             dataType:"json",

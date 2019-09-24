@@ -9,21 +9,21 @@
 
         $.ajax({
             // contentType: 'application/json;charset=UTF-8',
-            url:"http://localhost:8080/sys/authorityManage",
+            url:"/sys/authorityManage",
             type:"get",
             async:false,
             dataType:"json",
             success:function (data) {
-                authority = data.data;
-                var html = "<div style='width:95%'><table class='table table-striped table-bordered' style='text-align:center'><thead><tr>" +
-                    "<th style='text-align:center'>用户名</th><th style='text-align:center'>管理的站点</th><th style='text-align:center'>可进行的操作</th><th style='text-align:center'>操作</th></tr></thead><tbody>";
-                for(var i=0;i<data.data.length;i++){
-                    html+="<tr><td style='width: 200px'>"+data.data[i].username+"</td><td>"+data.data[i].stationName+"</td><td style='width:500px'><div style='float:left;width: 100px'><input type='checkbox' id='a"+i+"' value='"+data.data[i].id+"'>添加物体</div><div style='float:left;width: 100px'><input type='checkbox' id='d"+i+"' value='"+data.data[i].id+"'>删除物体</div><div style='float:left;width: 120px'><input type='checkbox' id='u"+i+"' value='"+data.data[i].id+"'>修改物体名称</div><div style='float:left;width: 120px'><input type='checkbox' id='us"+i+"' value='"+data.data[i].id+"'>修改站点名称</div></td>" +
-                        "<td style='width: 200px'><a id='"+authority[i].id+"' data-toggle=\"modal\" data-target=\"#updateAdminModal\" class=\"btn btn-sm btn-warning\" onclick=\"openModal('/sys/toUpdateAdmin','updateAdminModal',this.id)\">修改</a>" +
-                        "<a id='"+authority[i].id+"' data-toggle='modal' data-target='#deleteAdminModal' class='btn btn-sm btn-danger' onclick=\"openModal('/sys/toDeleteAdmin','deleteAdminModal',this.id)\">删除</a></td><tr>"
-                }
-                html+="</tbody></table>";
-                document.getElementById("administrator").innerHTML = html;
+                // authority = data.data;
+                // var html = "<div style='width:95%'><table class='table table-striped table-bordered' style='text-align:center'><thead><tr>" +
+                //     "<th style='text-align:center'>用户名</th><th style='text-align:center'>管理的站点</th><th style='text-align:center'>可进行的操作</th><th style='text-align:center'>操作</th></tr></thead><tbody>";
+                // for(var i=0;i<data.data.length;i++){
+                //     html+="<tr><td style='width: 200px'>"+authority[i].username+"</td><td>"+authority[i].stationName+"</td><td style='width:500px'><div style='float:left;width: 100px'><input type='checkbox' id='a"+i+"' value='"+authority[i].id+"'>添加物体</div><div style='float:left;width: 100px'><input type='checkbox' id='d"+i+"' value='"+authority[i].id+"'>删除物体</div><div style='float:left;width: 120px'><input type='checkbox' id='u"+i+"' value='"+authority[i].id+"'>修改物体名称</div><div style='float:left;width: 120px'><input type='checkbox' id='us"+i+"' value='"+authority[i].id+"'>修改站点名称</div></td>" +
+                //         "<td style='width: 200px'><a id='"+authority[i].id+"' data-toggle=\"modal\" data-target=\"#updateAdminModal\" class=\"btn btn-sm btn-warning\" onclick=\"openModal('/sys/toUpdateAdmin','updateAdminModal',this.id)\">修改</a>" +
+                //         "<a id='"+authority[i].id+"' data-toggle='modal' data-target='#deleteAdminModal' class='btn btn-sm btn-danger' onclick=\"openModal('/sys/toDeleteAdmin','deleteAdminModal',this.id)\">删除</a></td></tr>"
+                // }
+                // html+="</tbody></table>";
+                // document.getElementById("administrator").innerHTML = html;
             }
         });
         for(var s= 0;s<authority.length;s++){
@@ -53,7 +53,7 @@
                     if(isConfirm===true){
                         $.ajax({
                             // contentType: 'application/json;charset=UTF-8',
-                            url:"http://localhost:8080/sys/setAddAuthority",
+                            url:"/sys/setAddAuthority",
                             type:"post",
                             data:{"id":id},
                             dataType:"json",
@@ -78,7 +78,7 @@
                     if(isConfirm===true){
                         $.ajax({
                             // contentType: 'application/json;charset=UTF-8',
-                            url:"http://localhost:8080/sys/setDeleteAuthority",
+                            url:"/sys/setDeleteAuthority",
                             type:"post",
                             data:{"id":value},
                             dataType:"json",
@@ -103,7 +103,7 @@
                     if(isConfirm===true){
                         $.ajax({
                             // contentType: 'application/json;charset=UTF-8',
-                            url:"http://localhost:8080/sys/setUpdateAuthority",
+                            url:"/sys/setUpdateAuthority",
                             type:"post",
                             data:{"id":value},
                             dataType:"json",
@@ -128,7 +128,7 @@
                     if(isConfirm===true){
                         $.ajax({
                             // contentType: 'application/json;charset=UTF-8',
-                            url:"http://localhost:8080/sys/setStationUpdateAuthority",
+                            url:"/sys/setStationUpdateAuthority",
                             type:"post",
                             data:{"id":value},
                             dataType:"json",
@@ -142,7 +142,6 @@
             })
         }
     });
-
 </script>
 
 <body>
@@ -154,6 +153,34 @@
     </div>
     <!--数据展示-->
     <div class="ibox-content" id="administrator">
+        <div style="width: 95%">
+            <table class="table table-striped table-bordered" style="text-align: center">
+                <thead>
+                <tr>
+                    <th style="text-align: center">用户名</th>
+                    <th style="text-align: center">管理的站点</th>
+                    <th style="text-align: center">可进行的操作</th>
+                    <th style="text-align: center">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user:${users}">
+                    <td style="width: 200px" th:text="${user.username}">username</td>
+                    <td style="text-align: center" th:text="${user.stationName}">stationName</td>
+                    <td style="width: 500px">
+                        <div style="float: left;width: 100px"><input type="checkbox" id="q" value="id">添加物体</div>
+                        <div style="float: left;width: 100px"><input type="checkbox" id="w" value="id">删除物体</div>
+                        <div style="float: left;width: 100px"><input type="checkbox" id="e" value="id">修改物体名称</div>
+                        <div style="float: left;width: 100px"><input type="checkbox" id="r" value="id">修改站点名称</div>
+                    </td>
+                    <td style="width: 200px">
+                        <a id="t" data-toggle="modal" data-target="#updateAdminModal" class="btn btn-sm btn-warning" onclick="openModal('/sys/toUpdateAdmin','updateAdminModal',this.id)">修改</a>
+                        <a id="y" data-toggle='modal' data-target='#deleteAdminModal' class='btn btn-sm btn-danger' onclick="openModal('/sys/toDeleteAdmin','deleteAdminModal',this.id)">删除</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 

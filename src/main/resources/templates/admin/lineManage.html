@@ -2,39 +2,6 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <!--引入统一头-->
 <head th:include="import/head :: head"><title></title></head>
-<script>
-    $(document).ready(function() {
-        $.ajax({
-            // contentType: 'application/json;charset=UTF-8',
-            url:"http://localhost:8080/admin/allLine",
-            type:"get",
-            dataType:"json",
-            success:function (data) {
-                var html = "";
-                for(var i=0;i<data.length;i++) {
-                    html +="<div class=\"panel-group\"><div class=\"panel panel-default\">" +
-                           "    <div class=\"panel-heading\" style=\"background:#5599FF; color:#FFF\"><h4 class=\"panel-title\">" +
-                           "        <a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#"+i+"\">"+data[i].lineName+"" +
-                           "            <span style='margin-left: 80%;display: inline'>"+
-                           "               <a id = '"+data[i].lineName+"' data-toggle=\"modal\" data-target=\"#addStationModal\" class=\"btn btn-sm btn-success\" onclick=\"openModal('/admin/toAddStation','addStationModal',this.id)\">添加站点</a>" +
-                           "               <a id = '"+data[i].lineName+"' data-toggle=\"modal\" data-target=\"#updateLineModal\" class=\"btn btn-sm btn-warning\" onclick=\"openModal('/admin/toUpdateLine','updateLineModal',this.id)\">修改名称</a>" +
-                           "               <a id = '"+data[i].lineName+"' data-toggle=\"modal\" data-target=\"#deleteLineModal\" class=\"btn btn-sm btn-danger\"  onclick=\"openModal('/admin/toDeleteLine','deleteLineModal',this.id)\">删除线路</a></span></a></h4></div>" +
-                           "<div id=\""+i+"\" class=\"panel-collapse collapse in\"><table class=\"table table-striped table-bordered\">" +
-                           "<thead><tr><th style='width: 200px;text-align: center'>站点名称</th><th style='text-align: center;'>场景地址</th><th style=\"text-align: center;width: 300px\">操作</th></tr></thead><tbody>" ;
-                    for(var j=0;j<data[i].station.length;j++) {
-                        html+="<tr><td style='width: 200px;text-align: center'>"+data[i].station[j].stationName+"</td><td style='text-align: center'>"+data[i].station[j].sceneId+"</td>" +
-                              "   <td style=\"text-align: center;\"><a id='"+data[i].station[j].stationId+"' class=\"btn btn-sm btn-success\" href='/admin/thingsManage?id="+data[i].station[j].stationId+"' >物体信息</a>" +
-                              "      <a id = '"+data[i].station[j].stationId+"' data-toggle=\"modal\" data-target=\"#updateStationModal\" class=\"btn btn-sm btn-warning\" onclick=\"openModal('/admin/toUpdateStation','updateStationModal',this.id)\">修改</a>" +
-                              "      <a id = '"+data[i].station[j].stationId+"' data-toggle=\"modal\" data-target=\"#deleteStationModal\" class=\"btn btn-sm btn-danger\"  onclick=\"openModal('/admin/toDeleteStation','deleteStationModal',this.id)\">删除</a>" +
-                              "   </td></tr>";
-                    }
-                    html+="</tbody></table></div></div></div>";
-                }
-                document.getElementById("accordion").innerHTML = html;
-            }
-        });
-    });
-</script>
 <body style="min-width: 1550px;overflow: visible">
 <div class="row">
     <div class="col-sm-12">
@@ -45,7 +12,46 @@
                 </h3>
             </div>
 <!--            数据展示-->
-            <div class="ibox-content" id="accordion"></div>
+            <div class="ibox-content">
+                <div class="panel-group" th:each="line,iterStat:${lineList}">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="background: #5599FF;color: #FFF">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" th:href="'#'+${iterStat.count}">
+                                    <span th:text="${line.lineName}">lineName</span>
+                                    <span style="margin-left: 80%;display: inline">
+                                        <a th:id="${line.lineName}" data-toggle="modal" data-target="#addStationModal" class="btn btn-sm btn-success" onclick="openModal('/admin/toAddStation','addStationModal',this.id)">添加站点</a>
+                                        <a th:id="${line.lineName}" data-toggle="modal" data-target="#updateLineModal" class="btn btn-sm btn-warning" onclick="openModal('/admin/toUpdateLine','updateLineModal',this.id)">修改名称</a>
+                                        <a th:id="${line.lineName}" data-toggle="modal" data-target="#deleteLineModal" class="btn btn-sm btn-danger" onclick="openModal('/admin/toDeleteLine','deleteLineModal',this.id)">删除线路</a>
+                                    </span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div th:id="${iterStat.count}" class="panel-collapse collapse in">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                <tr>
+                                    <th style="width: 200px;text-align: center">站点名称</th>
+                                    <th style="text-align: center">场景地址</th>
+                                    <th style="width: 300px;text-align: center">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="station:${line.station}">
+                                    <td style="width: 200px;text-align: center" th:text="${station.stationName}">stationName</td>
+                                    <td style="text-align: center" th:text="${station.sceneId}">sceneId</td>
+                                    <td>
+                                        <a class="btn btn-sm btn-success" th:href="@{/admin/thingsManage(id=${station.stationId})}">物体信息</a>
+                                        <a th:id="${station.stationId}" data-toggle="modal" data-target="#updateStationModal" class="btn btn-sm btn-warning" onclick="openModal('/admin/toUpdateStation','updateStationModal',this.id)">修改</a>
+                                        <a th:id="${station.stationId}" data-toggle="modal" data-target="#deleteStationModal" class="btn btn-sm btn-danger" onclick="openModal('/admin/toDeleteStation','deleteStationModal',this.id)">删除</a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

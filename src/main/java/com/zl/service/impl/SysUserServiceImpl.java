@@ -10,16 +10,14 @@ import com.zl.service.SysUserService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class SysUserServiceImpl implements SysUserService{
@@ -191,6 +189,42 @@ public class SysUserServiceImpl implements SysUserService{
             Station station = stationMapper.oneStationByName(name);
             sysUserMapper.addStation(userId,station.getStationId());
         }
+
+    }
+
+    /**
+     *JS处需要展示的数据
+     * @return 管理的站点
+     */
+    @Override
+    public List<Station> stationList() {
+
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        SysUser sysUser =(SysUser) authentication.getPrincipal();
+
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+
+        List<Station> stationList = new ArrayList<>();
+
+        List<SysUserStation> sysUserStations = sysUserMapper.adminStations(sysUser.getId());
+
+        for(GrantedAuthority authority:authorities){
+            String authority1 = authority.getAuthority();
+            if(authority1.equals("ROLE_ADMIN")){
+                return stationMapper.allStation();
+            }else {
+                for(SysUserStation sysUserStation:sysUserStations){
+
+                    Station station = stationMapper.oneStation(sysUserStation.getStation_id());
+                    stationList.add(station);
+                }
+
+            }
+        }
+        return stationList;
+
 
     }
 

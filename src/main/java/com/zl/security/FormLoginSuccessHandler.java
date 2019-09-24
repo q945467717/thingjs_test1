@@ -18,7 +18,7 @@ public class FormLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandl
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
-        Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+        //Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
 
 //        if(roles.contains("ROLE_ADMIN")){
 //            response.sendRedirect("/admin/index");
@@ -26,11 +26,11 @@ public class FormLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandl
 //        else {
 //            response.sendRedirect("/user/index");
 //        }
-        if(roles.contains("ROLE_USER")){
-            response.sendRedirect("/user/index");
-        }else {
-            response.sendRedirect("/admin/index");
-        }
+        //if(roles.contains("ROLE_USER")){
+            response.sendRedirect("admin/index");
+       // }else {
+            //response.sendRedirect("/admin/index");
+        //}
 
        // super.onAuthenticationSuccess(request, response, authentication);
     }

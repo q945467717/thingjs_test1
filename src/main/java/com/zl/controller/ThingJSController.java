@@ -32,11 +32,6 @@ public class ThingJSController {
      * @param response
      * @return
      */
-
-
-
-
-
     @RequestMapping("/lineInfo")
     public List<Line> lineInfo(HttpServletResponse response){
 
@@ -122,5 +117,7 @@ public class ThingJSController {
 
         return thingJSService.thingList(stationId);
     }
+
+
 
 }

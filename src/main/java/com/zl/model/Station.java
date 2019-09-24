@@ -55,7 +55,9 @@ public class Station {
         return "Station{" +
                 "stationName='" + stationName + '\'' +
                 ", stationId=" + stationId +
+                ", lineId=" + lineId +
                 ", sceneId='" + sceneId + '\'' +
+                ", things=" + things +
                 '}';
     }
 }

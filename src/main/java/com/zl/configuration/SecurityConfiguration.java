@@ -41,7 +41,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().disable()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/admin/**","/user/**").authenticated()
+                .antMatchers("/admin/**","/sys/**").authenticated()
                 .and()
                 .formLogin().loginPage("/toLogin").loginProcessingUrl("/login_check").permitAll()
                 .successHandler(formLoginSuccessHandler())

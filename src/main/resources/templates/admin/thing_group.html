@@ -1,29 +1,32 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:include="import/head :: head"><meta charset="UTF-8"><title>站点管理</title></head>
+<head th:include="import/head :: head">
+    <meta charset="UTF-8">
+    <title>物体分组</title>
+</head>
 <body>
 <div class="ibox float-e-margins" >
     <div class="ibox-title">
         <h3 style="display: inline;">
-            我管理的站点：
+            物体分组
         </h3>
     </div>
     <!--数据展示-->
     <div class="ibox-content">
-        <div class="panel-group" th:each="station,iterStat:${stationList}">
+        <div class="panel-group">
             <div class="panel panel-default">
                 <div class="panel-heading" style="background:#5599FF;color: #FFF">
                     <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" th:href="'#'+${iterStat.count}">
-                            <span th:text="${station.stationName}"></span>
+                        <a data-toggle="collapse" data-parent="#accordion">
+                            <span></span>
                             <span style="margin-left: 80%;display: inline">
-                                <a th:if="${user.sadd} eq '1'" th:id="${station.stationId}" data-toggle="modal" data-target="#addThingModal" class="btn btn-sm btn-success" onclick="openModal('/admin/toAddThing','addThingModal',this.id)" th:text="添加物体"></a>
-                                <a th:if="${user.ssupdate} eq '1'" th:id="${station.stationId}" data-toggle="modal" data-target="#updateStationModal" class="btn btn-sm btn-warning" onclick="openModal('/admin/toUpdateStation','updateStationModal',this.id)">修改名称</a>
+                                <a data-toggle="modal" data-target="#addThingModal" class="btn btn-sm btn-success" onclick="openModal('/admin/toAddThing','addThingModal',this.id)" th:text="添加物体"></a>
+                                <a data-toggle="modal" data-target="#updateStationModal" class="btn btn-sm btn-warning" onclick="openModal('/admin/toUpdateStation','updateStationModal',this.id)">修改名称</a>
                             </span>
                         </a>
                     </h4>
                 </div>
-                <div th:id="${iterStat.count}" class="panel-collapse collapse in">
+                <div class="panel-collapse collapse in">
                     <table class="table table-striped table-bordered">
                         <thead>
                         <tr>
@@ -36,15 +39,15 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="things:${station.things}">
-                            <td style="width: 200px;text-align: center" th:text="${things.tid}">tid</td>
-                            <td style="text-align: center" th:text="${things.tname}">tname</td>
-                            <td style="text-align: center" th:text="${things.tposition}">tposition</td>
-                            <td style="text-align: center" th:text="${things.tgroup}">tgroup</td>
-                            <td style="text-align: center" th:text="${things.tcamera}">tcamera</td>
+                        <tr>
+                            <td style="width: 200px;text-align: center">tid</td>
+                            <td style="text-align: center">tname</td>
+                            <td style="text-align: center">tposition</td>
+                            <td style="text-align: center">tgroup</td>
+                            <td style="text-align: center">tcamera</td>
                             <td style="text-align: center">
-                                <a th:if="${user.supdate} eq '1'" th:id="${things.id}" data-toggle="modal" data-target="#updateThingModal" class="btn btn-sm btn-warning" onclick="openModal('/admin/toUpdateThing','updateThingModal',this.id)">修改</a>
-                                <a th:if="${user.sdelete} eq '1'" th:id="${things.id}" data-toggle="modal" data-target="#deleteThingModal" class="btn btn-sm btn-danger" onclick="openModal('/admin/toDeleteThing','deleteThingModal',this.id)">删除</a>
+                                <a data-toggle="modal" data-target="#updateThingModal" class="btn btn-sm btn-warning" onclick="openModal('/admin/toUpdateThing','updateThingModal',this.id)">修改</a>
+                                <a data-toggle="modal" data-target="#deleteThingModal" class="btn btn-sm btn-danger" onclick="openModal('/admin/toDeleteThing','deleteThingModal',this.id)">删除</a>
                             </td>
                         </tr>
                         </tbody>

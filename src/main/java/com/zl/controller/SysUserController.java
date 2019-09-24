@@ -2,7 +2,9 @@ package com.zl.controller;
 
 import com.zl.Util.ResultUtil;
 import com.zl.model.Result;
+import com.zl.model.Station;
 import com.zl.model.SysUser;
+import com.zl.service.StationService;
 import com.zl.service.SysUserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Controller
 @RequestMapping("/sys")
@@ -18,6 +21,8 @@ public class SysUserController {
 
     @Autowired
     private SysUserService sysUserService;
+    @Autowired
+    private StationService stationService;
 
     //添加管理员接口
     @ResponseBody
@@ -48,7 +53,7 @@ public class SysUserController {
     //去添加管理员模态框
     @RequestMapping("/toAddAdmin")
     public String toAddAdmin(){
-        return "/modal/addAdminModal";
+        return "modal/addAdminModal";
     }
 
     //去删除管理员模态框
@@ -57,15 +62,19 @@ public class SysUserController {
 
         model.addAttribute("userId",id);
 
-        return "/modal/deleteAdminModal";
+        return "modal/deleteAdminModal";
     }
     //去修改管理员模态框
     @RequestMapping("/toUpdateAdmin")
     public String toUpdateAdmin(Integer id , Model model){
 
+        List<Station> stations = stationService.adminStations(id);
+
+        model.addAttribute("stationList",stations);
+
         model.addAttribute("userId",id);
 
-        return "/modal/updateAdminModal";
+        return "modal/updateAdminModal";
     }
 
     //删除管理员接口
@@ -99,8 +108,13 @@ public class SysUserController {
 
     //跳转到权限管理页面
     @RequestMapping("/peopleManage")
-    public String peopleManage(){
-        return "/admin/peopleManage";
+    public String peopleManage(Model model){
+
+        List allsysUser = sysUserService.allsysUser();
+
+        model.addAttribute("users",allsysUser);
+
+        return "admin/peopleManage";
     }
 
     //管理员信息展示接口

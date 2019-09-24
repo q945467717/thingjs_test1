@@ -7,6 +7,7 @@ import com.zl.model.vo.SysUserStation;
 import com.zl.service.StationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +27,12 @@ public class StationServiceImpl implements StationService {
     }
 
     @Override
+    @Transactional
     public void deleteStation(Integer stationId) {
 
         stationMapper.deleteStation(stationId);
+
+        sysUserMapper.deleteUserStationRoles(stationId);
     }
 
     @Override

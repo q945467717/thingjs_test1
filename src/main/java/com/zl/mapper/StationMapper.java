@@ -26,5 +26,8 @@ public interface StationMapper {
     @Select("select * from user_station where user_id=#{userId}")
     List<SysUserStation> oneSysUserStation(int userId);
 
+    @Select("select * from stationinfo")
+    List<Station> allStation();
+
 
 }

@@ -9,8 +9,6 @@ import java.util.List;
 
 public interface SysUserMapper {
 
-    //@Options(useGeneratedKeys=true,keyProperty="id",keyColumn="id")
-    //@Insert("insert into sys_user(username,password,stationId) values(#{username},#{password},#{stationId})")
     int save(SysUser sysUser);
 
     @Select("select * from sys_user where username=#{username}")
@@ -60,5 +58,8 @@ public interface SysUserMapper {
 
     @Update("update sys_user set password=#{password} where username=#{username}")
     void changePassword(String username,String password);
+
+    @Delete("delete from user_station where station_id=#{stationId}")
+    void deleteUserStationRoles(Integer stationId);
 
 }

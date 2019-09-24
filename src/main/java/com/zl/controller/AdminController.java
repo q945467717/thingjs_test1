@@ -4,6 +4,7 @@ import com.zl.Util.ResultUtil;
 import com.zl.model.*;
 import com.zl.service.LineService;
 import com.zl.service.StationService;
+import com.zl.service.SysUserService;
 import com.zl.service.ThingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -28,25 +29,54 @@ public class AdminController {
     private StationService stationService;
     @Autowired
     private ThingsService thingsService;
+    @Autowired
+    private SysUserService sysUserService;
 
     //跳转到线路管理页面
     @RequestMapping("/lineManage")
-    public String lineManage(){
-        return "/admin/lineManage";
+    public String lineManage(Model model){
+
+        List<Line> lineList = lineService.lineList();
+
+        model.addAttribute("lineList",lineList);
+
+        return "admin/lineManage";
     }
     //跳转到物体管理页面
     @RequestMapping("/thingsManage")
     public String thingsManage(HttpServletRequest request,Model model){
 
         int id = Integer.parseInt(request.getParameter("id"));
+
+        List<Things> thingsList = thingsService.allThing(id);
+
+        model.addAttribute("thingsList",thingsList);
+
         model.addAttribute("stationId",id);
-        return "/admin/thingsManage";
+
+        return "admin/thingsManage";
     }
+    //跳转到物体分组页面
+    @RequestMapping("/thingGroup")
+    public String thingGroup(){
+        return "admin/thing_group";
+    }
+
     //跳转到管理员首页
     @RequestMapping("/index")
-    public String adminIndex(){
+    public String adminIndex(Model model){
+
+        List<Station> stationList = sysUserService.stationList();
+
+        model.addAttribute("stationList",stationList);
 
         return "admin/index";
+    }
+    //跳转后台管理界面
+    @RequestMapping("/backstageIndex")
+    public String backstageIndex(){
+
+        return "admin/backstage_index";
     }
     //跳转到站点管理页面
     @RequestMapping("/stationManage")
@@ -55,6 +85,10 @@ public class AdminController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         SysUser sysUser = (SysUser) authentication.getPrincipal();
+
+        List<Station> stationList = stationService.adminStations(sysUser.getId());
+
+        model.addAttribute("stationList",stationList);
 
         model.addAttribute("user",sysUser);
 
@@ -65,8 +99,18 @@ public class AdminController {
     public String hello(){
         return "admin/hello";
     }
+    //ThingJS展示页面
+    @RequestMapping("/reception")
+    public String reception(Model model){
+
+        List<Station> stationList = sysUserService.stationList();
+
+        model.addAttribute("stationList",stationList);
+
+        return "admin/reception";
+    }
     //无权限模态框
-    @RequestMapping("noAuthority")
+    @RequestMapping("/noAuthority")
     public String noAuthority(){
         return "modal/noAuthorityModal";
     }
@@ -216,15 +260,6 @@ public class AdminController {
 
         stationService.deleteStation(stationId);
 
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//        SysUser sysUser = (SysUser) authentication.getPrincipal();
-//
-//        if(!sysUser.getUsername().equals("admin")){
-//            stationService.deleteStationRole(sysUser.getId(),stationId);
-//        }
-
-
         return "删除站点成功";
     }
 
@@ -288,7 +323,7 @@ public class AdminController {
         return "新增物品成功";
     }
     /**
-     * 展示所有线路接口
+     * 展示所有线路接口(未使用)
      */
     @ResponseBody
     @RequestMapping("/allLine")
@@ -304,7 +339,7 @@ public class AdminController {
 //    }
 
     /**
-     * 展示站点物体接口
+     * 展示站点物体接口(未使用)
      * @param stationId 站点ID
      */
     @ResponseBody
@@ -315,7 +350,7 @@ public class AdminController {
     }
 
     /**
-     * 展示该管理员管理的站点接口
+     * 展示该管理员管理的站点接口(未使用)
      * @param userId 管理员ID
      */
     @ResponseBody

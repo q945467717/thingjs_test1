@@ -1,7 +1,5 @@
 package com.zl.controller;
 
-import com.zl.model.SysUser;
-import com.zl.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -14,13 +12,16 @@ public class MainController {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-    @Autowired
-    private UserService mainService;
 
     @RequestMapping("/")
     public String index(){
         return "redirect:toLogin";
     }
+
+//    @RequestMapping("/")
+//    public String index(){
+//        return "a";
+//    }
 
     @RequestMapping("/toLogin")
     public String toLogin(){
