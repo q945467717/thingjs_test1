@@ -1,5 +1,6 @@
 package com.zl.mapper;
 
+import com.zl.model.ThingGroup;
 import com.zl.model.Things;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
@@ -25,4 +26,14 @@ public interface ThingsMapper {
 
     @Select("select * from thingsinfo where id =#{id}")
     Things oneThing(Integer id);
+
+    @Insert("insert into thing_group(tg_name) value (#{groupName})")
+    void addGroup(String groupName);
+
+    @Insert("insert into thing_group_relation(thing_id,group_id) values(#{thingId},#{groupId})")
+    void thingGroupRelation(Integer thingId,Integer groupId);
+
+    @Select("select * from thing_group ")
+    List<ThingGroup> thingGroupList();
+
 }

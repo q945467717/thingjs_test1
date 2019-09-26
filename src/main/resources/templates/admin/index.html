@@ -45,7 +45,7 @@
         </a>
         <a href="javascript:void(0);" class="list-group-item search authority" sec:authorize="hasRole('ROLE_ADMIN')">全部站点</a>
 
-        <a th:each="station:${stationList}" href="javascript:void(0);" class="list-group-item search authority"  th:text="${station.stationName}" sec:authorize="hasRole('ROLE_MANAGE')"></a>
+        <a th:each="station:${stationList}" href="javascript:void(0);" class="list-group-item search authority"  th:text="${station.stationName}" sec:authorize="hasRole('ROLE_MANAGE')">全部站点</a>
     </div>
 
     <div style="padding: 10px 20px;position: absolute;z-index: 10000;left: 300px">
@@ -56,12 +56,28 @@
         <a class="btn btn-danger" type="button" th:href="@{/logout}">退出</a>
     </div>
 
-
-
     <script src="https://webapi.amap.com/subway?v=1.0&key=565f4428b3187dfafb7274ddcfa50eb8&callback=cbk"></script>
-    <script type="text/javascript">
+    <script>
+
+        $(document).ready(function () {
+            $.ajax({
+                // contentType: 'application/json;charset=UTF-8',
+                url:"/admin/adminStation",
+                data:{},
+                type:"POST",
+                dataType:"json",
+                success:function (data) {
+
+                }
+            })
+        });
+
+
+
+
 
         window.cbk = function(){
+
             var mySubway = subway("mySubway", {
                 adcode: 5101,
                 theme:"colorful"
@@ -114,32 +130,63 @@
             mySubway.event.on("station.touch", function(ev,info) {
 
                 var count =0;
-                var textList =[];
 
-                if($(".authority").text()==="全部站点"){
+                var textList=[];
+
+                $.ajax({
+                    // contentType: 'application/json;charset=UTF-8',
+                    url:"/admin/adminStation",
+                    data:{},
+                    type:"POST",
+                    async:false,
+                    dataType:"json",
+                    success:function (data) {
+                        textList = data.data;
+                    }
+                });
+
+                if(textList.length === 0){
                     window.location.href="../admin/reception?name="+info.name;
                 }else {
-
-                    $(".authority").each(function () {
-
-                        textList.push($(this).text());
-
-                        if(info.name===$(this).text()){
-                            window.location.href="../admin/reception?name="+info.name;
-                        }else {
-                            count+=1;
+                        for(var i=0;i<textList.length;i++){
+                            if(textList[i].stationName===info.name){
+                                window.location.href="../admin/reception?name="+info.name;
+                            }else {
+                                count+=1;
+                            }
                         }
-                    });
+
                     if(count===textList.length){
                         swal({
-                            title: "无权查看该场景",
-                            type: "error"
+                            title:"无权查看该场景",
+                            type:"error"
                         });
                     }
+
                 }
 
 
-
+                // if($(".authority").text()==="全部站点"){
+                //     window.location.href="../admin/reception?name="+info.name;
+                // }else {
+                //
+                //     $(".authority").each(function () {
+                //
+                //         textList.push($(this).text());
+                //
+                //         if(info.name===$(this).text()){
+                //             window.location.href="../admin/reception?name="+info.name;
+                //         }else {
+                //             count+=1;
+                //         }
+                //     });
+                //     if(count===textList.length){
+                //         swal({
+                //             title: "无权查看该场景",
+                //             type: "error"
+                //         });
+                //     }
+                // }
 
             });
 

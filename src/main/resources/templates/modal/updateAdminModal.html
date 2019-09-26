@@ -5,19 +5,32 @@
     ul{
         margin:0;
         padding:0;
-        height: 69px;
-        max-height: 69px;
+        height: 81px;
+        max-height: 81px;
         overflow-y:scroll
     }
 </style>
 
 <div class="modal-dialog" style="width: 300px" xmlns:th="http://www.thymeleaf.org" >
-    <div class="modal-content">
+    <div class="modal-content" style="width: 400px">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title" id="myModalLabel">管理的站点</h4>
         </div>
-        <div style="float: right;width: 100px;height: 115px"><div>已选择站点<br>(点击名称移除)</div><div style="border:1px solid #0C0C0C;height: 71px;max-height: 71px"><ul id="select"><li th:each="station:${stationList}" th:text="${station.stationName}" onclick="$(this).remove()"></li></ul></div></div>
+        <div style="float: right;width: 160px;height: 115px;margin: 0 20px">
+            <div>已选择站点
+            </div>
+            <div style="border:1px solid #0C0C0C;height: 83px;max-height: 83px">
+                <ul id="select">
+                    <li th:each="station:${stationList}" style="font-size: 16px">
+                        <span th:text="${station.stationName}"></span>
+                        <a href='javascript:void(0);' onclick='$(this).parent().remove()'>
+                            <span class='glyphicon glyphicon-remove' style='float: right'></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
         <div style="width: 250px">
             <div class="modal-body" style="width: 200px">请选择管理的线路：<select style="width: 172px;height: 25px" id="line"></select></div>
             <div class="modal-body" style="width: 200px">请选择管理的站点：<select style="width: 172px;height: 25px" id="station"><option>请选择站点</option></select></div></div>
@@ -42,13 +55,16 @@
             type:"get",
             dataType:"json",
             success:function (data) {
-                for(var i=0;i<data.length;i++){
+                for(var i=0;i<data.data.length;i++){
                     var option = document.createElement("option");
-                    $(option).text(data[i].lineName);
+                    $(option).text(data.data[i].lineName);
                     $('#line').append(option);
                 }
             }
         });
+
+
+
 
         $('#line').change(function () {
             $("#station").empty();
@@ -65,11 +81,11 @@
                     var obj = document.getElementById('line');
                     var index = obj.selectedIndex;
                     var text = obj.options[index].text;
-                    for(var i=0;i<data.length;i++){
-                        if(data[i].lineName===text){
-                            for(var j=0;j<data[i].station.length;j++){
+                    for(var i=0;i<data.data.length;i++){
+                        if(data.data[i].lineName===text){
+                            for(var j=0;j<data.data[i].station.length;j++){
                                 var option = document.createElement("option");
-                                $(option).text(data[i].station[j].stationName);
+                                $(option).text(data.data[i].station[j].stationName);
                                 $('#station').append(option);
                             }
                         }
@@ -94,7 +110,7 @@
                }
             });
             if(!flag&&text!=="请选择站点"){
-                $("#select").append("<li onclick='$(this).remove()'>"+text+"</li>");
+                $("#select").append("<li style='font-size: 16px'>"+text+"<a href='javascript:void(0);' onclick='$(this).parent().remove()'><span class='glyphicon glyphicon-remove' style='float: right'></span></a></li>");
             }
         })
     });

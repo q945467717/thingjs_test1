@@ -1,6 +1,7 @@
 package com.zl.service.impl;
 
 import com.zl.mapper.ThingsMapper;
+import com.zl.model.ThingGroup;
 import com.zl.model.Things;
 import com.zl.service.ThingsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +38,15 @@ public class ThingsServiceImpl implements ThingsService {
     @Override
     public Things oneThing(Integer id) {
         return thingsMapper.oneThing(id);
+    }
+
+    @Override
+    public void addThingGroup(String groupName) {
+        thingsMapper.addGroup(groupName);
+    }
+
+    @Override
+    public List<ThingGroup> thingGroupList() {
+        return thingsMapper.thingGroupList();
     }
 }

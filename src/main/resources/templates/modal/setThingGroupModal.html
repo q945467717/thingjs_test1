@@ -1,0 +1,156 @@
+<div class="modal-dialog" style="width: 450px">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">添加物体</h4>
+        </div>
+        <div class="modal-body" style="width: 450px">
+            <div style="width: 200px;float: right">
+                <span style="font-size: 17px">已选择物体</span>
+                <ul class="list-group" style="height: 160px;max-height: 160px;overflow-y: scroll" id="select"></ul>
+            </div>
+            <div style="width: 170px">
+                <span>请选择线路:</span>
+                <select class="form-control" style="margin: 5px 0" id="line"><option>请选择线路</option></select>
+                <span>请选择站点:</span>
+                <select class="form-control" style="margin: 5px 0" id="station"><option>请选择站点</option></select>
+                <span>请选择物体:</span>
+                <select class="form-control" style="margin: 5px 0" id="thing"><option>请选择物体</option></select>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-primary" onclick="setThingGroup()" >确定添加</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    
+    
+    $(function () {
+
+        var info=[];
+
+        $.ajax({
+            // contentType: 'application/json;charset=UTF-8',
+            url:"/admin/allLine",
+            data:{},
+            type:"POST",
+            dataType:"json",
+            success:function (data) {
+                info=data.data;
+                for(var i=0;i<info.length;i++){
+                    var option = document.createElement("option");
+                    $(option).text(info[i].lineName);
+                    $('#line').append(option);
+                }
+            }
+        });
+
+        $("#line").change(function () {
+            $("#station").empty();
+            $("#thing").empty();
+            var doption = document.createElement("option");
+            $(doption).text("请选择站点");
+            $("#station").append(doption);
+            var toption = document.createElement("option");
+            $(toption).text("请选择物体");
+            $("#thing").append(toption);
+
+            var obj = document.getElementById('line');
+            var index = obj.selectedIndex;
+            var text = obj.options[index].text;
+
+            for(var i=0;i<info.length;i++){
+                if(info[i].lineName===text){
+                    for(var j=0;j<info[i].station.length;j++){
+                        var option = document.createElement("option");
+                        $(option).text(info[i].station[j].stationName);
+                        $("#station").append(option);
+                    }
+                }
+            }
+        });
+
+        $("#station").change(function () {
+            $("#thing").empty();
+            var doption = document.createElement("option");
+            $(doption).text("请选择物体");
+            $("#thing").append(doption);
+
+            var obj = document.getElementById('station');
+            var index = obj.selectedIndex;
+            var stationtext = obj.options[index].text;
+
+            var lineobj = document.getElementById('line');
+            var lineindex = lineobj.selectedIndex;
+            var linetext = lineobj.options[lineindex].text;
+
+            for(var i=0;i<info.length;i++){
+                if(info[i].lineName===linetext){
+                    for(var j=0;j<info[i].station.length;j++){
+                        if(info[i].station[j].stationName===stationtext){
+                            for(var k=0;k<info[i].station[j].things.length;k++){
+                                var option = document.createElement("option");
+                                $(option).text(info[i].station[j].things[k].tname);
+                                $("#thing").append(option);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        $("#thing").change(function () {
+            var obj = document.getElementById('thing');
+            var index = obj.selectedIndex;
+            var text = obj.options[index].text;
+
+            var flag=false;
+
+            $("#select").find("li").each(function () {
+                if($(this).text()===text){
+                    swal({
+                        title: "该物体已存在",
+                        type: "error"
+                    });
+                    flag =true
+                }
+            });
+            if(!flag&&text!=="请选择站点"){
+                $("#select").append("<li  class=\"list-group-item\" style=\"padding: 5px 10px\">"+text+"<a href='javascript:void(0);' onclick='$(this).parent().remove()'><span class='glyphicon glyphicon-remove' style='float: right'></span></a></li>");
+            }
+        })
+
+    });
+
+    function setThingGroup() {
+        var groupName = $("#groupName").val();
+        $.ajax({
+            // contentType: 'application/json;charset=UTF-8',
+            url:"/admin/AddThingGroup",
+            data:{'groupName':groupName},
+            type:"POST",
+            dataType:"json",
+            success:function (data) {
+                if(data.code===0){
+                    swal({
+                        title: data.msg,
+                        type: "error"
+                    });
+                }else {
+                    swal({
+                        title: data.data,
+                        type: "success"
+                    },function(){
+                        $('#addThingGroupModal').modal('hide');
+                        window.location.reload();
+                    });
+                }
+            }
+
+        })
+    }
+</script>

@@ -40,7 +40,7 @@
                                 <tr th:each="station:${line.station}">
                                     <td style="width: 200px;text-align: center" th:text="${station.stationName}">stationName</td>
                                     <td style="text-align: center" th:text="${station.sceneId}">sceneId</td>
-                                    <td>
+                                    <td style="text-align: center">
                                         <a class="btn btn-sm btn-success" th:href="@{/admin/thingsManage(id=${station.stationId})}">物体信息</a>
                                         <a th:id="${station.stationId}" data-toggle="modal" data-target="#updateStationModal" class="btn btn-sm btn-warning" onclick="openModal('/admin/toUpdateStation','updateStationModal',this.id)">修改</a>
                                         <a th:id="${station.stationId}" data-toggle="modal" data-target="#deleteStationModal" class="btn btn-sm btn-danger" onclick="openModal('/admin/toDeleteStation','deleteStationModal',this.id)">删除</a>

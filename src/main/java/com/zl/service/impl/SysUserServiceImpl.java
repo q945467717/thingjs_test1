@@ -204,25 +204,16 @@ public class SysUserServiceImpl implements SysUserService{
 
         SysUser sysUser =(SysUser) authentication.getPrincipal();
 
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-
         List<Station> stationList = new ArrayList<>();
 
         List<SysUserStation> sysUserStations = sysUserMapper.adminStations(sysUser.getId());
 
-        for(GrantedAuthority authority:authorities){
-            String authority1 = authority.getAuthority();
-            if(authority1.equals("ROLE_ADMIN")){
-                return stationMapper.allStation();
-            }else {
                 for(SysUserStation sysUserStation:sysUserStations){
 
                     Station station = stationMapper.oneStation(sysUserStation.getStation_id());
                     stationList.add(station);
                 }
 
-            }
-        }
         return stationList;
 
 

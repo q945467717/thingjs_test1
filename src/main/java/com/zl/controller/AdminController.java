@@ -58,7 +58,12 @@ public class AdminController {
     }
     //跳转到物体分组页面
     @RequestMapping("/thingGroup")
-    public String thingGroup(){
+    public String thingGroup(Model model){
+
+        List<ThingGroup> thingGroups = thingsService.thingGroupList();
+
+        model.addAttribute("thingGroups",thingGroups);
+
         return "admin/thing_group";
     }
 
@@ -134,6 +139,20 @@ public class AdminController {
         model.addAttribute("id",id);
         return "modal/addThingModal";
     }
+    //去新增物体分组模态框
+    @RequestMapping("/toAddThingGroup")
+    public String toAddThingGroup(){
+
+        return "modal/addThingGroupModal";
+    }
+    //去设置物体分组模态框
+    @RequestMapping("/toSetThingGroup")
+    public String toSetThingGroup(){
+
+        return "modal/setThingGroupModal";
+    }
+
+
     //去修改线路名称模态框
     @RequestMapping("/toUpdateLine")
     public String toUpdateLine(String id, Model model){
@@ -322,21 +341,39 @@ public class AdminController {
 
         return "新增物品成功";
     }
+
+    /**
+     *新增物体分组接口
+     * @param groupName
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/AddThingGroup")
+    public Result AddThingGroup(String groupName,HttpServletResponse response){
+
+        if(groupName!=null&&groupName.length()!=0){
+            thingsService.addThingGroup(groupName);
+            return ResultUtil.success(response.getStatus(),"新增分组成功");
+        }else {
+            return ResultUtil.error(0,"请输入分组名称");
+        }
+    }
     /**
      * 展示所有线路接口(未使用)
      */
-    @ResponseBody
-    @RequestMapping("/allLine")
-    public List<Line> allLine(){
-
-        return lineService.lineList();
-    }
 //    @ResponseBody
 //    @RequestMapping("/allLine")
-//    public Result allLine(HttpServletResponse response){
+//    public List<Line> allLine(){
 //
-//        return ResultUtil.success(response.getStatus(),lineService.lineList());
+//        return lineService.lineList();
 //    }
+    @ResponseBody
+    @RequestMapping("/allLine")
+    public Result allLine(HttpServletResponse response){
+
+        return ResultUtil.success(response.getStatus(),lineService.lineList());
+
+    }
 
     /**
      * 展示站点物体接口(未使用)
@@ -344,25 +381,32 @@ public class AdminController {
      */
     @ResponseBody
     @RequestMapping("/stationThings")
-    public List<Things> stationThings(int stationId){
+    public List<Things> stationThings(HttpServletRequest request,Integer stationId){
 
-        return thingsService.allThing(stationId);
+
+        int id = Integer.parseInt(request.getParameter("stationId"));
+
+        return thingsService.allThing(id);
     }
 
     /**
      * 展示该管理员管理的站点接口(未使用)
-     * @param userId 管理员ID
      */
     @ResponseBody
     @RequestMapping("/adminStation")
-    public Result adminStation(int userId, HttpServletResponse response){
+    public Result adminStation(HttpServletResponse response){
+
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        SysUser sysUser = (SysUser) authentication.getPrincipal();
 
         try {
-            stationService.adminStations(userId);
+            stationService.adminStations(sysUser.getId());
         }catch (Exception e){
             e.printStackTrace();
             return ResultUtil.error(0,e.getMessage());
         }
-        return ResultUtil.success(response.getStatus(),stationService.adminStations(userId));
+        return ResultUtil.success(response.getStatus(),stationService.adminStations(sysUser.getId()));
     }
 }

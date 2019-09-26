@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -105,7 +106,6 @@ public class SysUserController {
         return ResultUtil.success(response.getStatus(),"修改成功");
     }
 
-
     //跳转到权限管理页面
     @RequestMapping("/peopleManage")
     public String peopleManage(Model model){
@@ -117,7 +117,7 @@ public class SysUserController {
         return "admin/peopleManage";
     }
 
-    //管理员信息展示接口
+    //管理员信息展示接口(未使用)
     @ResponseBody
     @RequestMapping("/authorityManage")
     public Result authorityManage(HttpServletResponse response){

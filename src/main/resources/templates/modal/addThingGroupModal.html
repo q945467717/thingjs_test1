@@ -1,29 +1,24 @@
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <div class="modal-dialog" style="width: 300px">
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="newName">新名称</h4>
+            <h4 class="modal-title" id="myModalLabel">新建分组</h4>
         </div>
-        <div class="modal-body">请输入新名称：<input type="text" id="newLineName"/></div>
+        <div class="modal-body" style="width: 300px">请输入分组名称：<input type="text" id="groupName" /></div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            <button type="button" th:id="${id}" class="btn btn-primary" onclick="updateLine(this.id)" >确定修改</button>
+            <button type="button" class="btn btn-primary" onclick="addThingGroup()" >确定新增</button>
         </div>
     </div>
 </div>
-</html>
 
 <script>
-    function updateLine(id) {
-
-
-
-        var newlineName = $("#newLineName").val();
+    function addThingGroup() {
+        var groupName = $("#groupName").val();
         $.ajax({
             // contentType: 'application/json;charset=UTF-8',
-            url:"/admin/UpdateLine",
-            data:{'lineName':id,"newlineName":newlineName},
+            url:"/admin/AddThingGroup",
+            data:{'groupName':groupName},
             type:"POST",
             dataType:"json",
             success:function (data) {
@@ -37,11 +32,12 @@
                         title: data.data,
                         type: "success"
                     },function(){
-                        $('#updateLineModal').modal('hide');
+                        $('#addThingGroupModal').modal('hide');
                         window.location.reload();
                     });
                 }
             }
+
         })
     }
 </script>

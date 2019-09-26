@@ -17,30 +17,63 @@
 <script>
     function deleteAll() {
 
-        var check = document.getElementsByName("check");
-        var flag= 0;
-        var checks =[];
-        for(var i=0;i<check.length;i++){
-            if(check[i].checked){
-                checks[flag] = check[i].value;
-                flag+=1;
-            }
+        var rows = $("#table").bootstrapTable('getSelections');// 获得要删除的数据
+        if (rows.length === 0) {// rows 主要是为了判断是否选中，下面的else内容才是主要
+            swal({
+                title: "未选择物体",
+                type: "error"
+            },function () {
+                $('#deleteAllModal').modal('hide');
+            })
+
+        } else {
+            var checks = [];// 声明一个数组
+            $(rows).each(function() {// 通过获得别选中的来进行遍历
+                checks.push(this.id);// cid为获得到的整条数据中的一列
+            });
+
+            $.ajax({
+                // contentType: 'application/json;charset=UTF-8',
+                url: "/admin/deleteAll",
+                data: {'checks': checks},
+                type: "POST",
+                dataType: "text",
+                success: function (data) {
+                    swal({
+                        title: data,
+                        type: "success"
+                    },function(){
+                        $('#deleteAllModal').modal('hide');
+                        window.location.reload();
+                    });
+                }
+            })
         }
-        $.ajax({
-            // contentType: 'application/json;charset=UTF-8',
-            url: "/admin/deleteAll",
-            data: {'checks': checks},
-            type: "POST",
-            dataType: "text",
-            success: function (data) {
-                swal({
-                    title: data,
-                    type: "success"
-                },function(){
-                    $('#deleteAllModal').modal('hide');
-                    window.location.reload();
-                });
-            }
-        });
+
+        // var check = document.getElementsByName("check");
+        // var flag= 0;
+        // var checks =[];
+        // for(var i=0;i<check.length;i++){
+        //     if(check[i].checked){
+        //         checks[flag] = check[i].value;
+        //         flag+=1;
+        //     }
+        // }
+        // $.ajax({
+        //     // contentType: 'application/json;charset=UTF-8',
+        //     url: "/admin/deleteAll",
+        //     data: {'checks': checks},
+        //     type: "POST",
+        //     dataType: "text",
+        //     success: function (data) {
+        //         swal({
+        //             title: data,
+        //             type: "success"
+        //         },function(){
+        //             $('#deleteAllModal').modal('hide');
+        //             window.location.reload();
+        //         });
+        //     }
+        // });
     }
 </script>
