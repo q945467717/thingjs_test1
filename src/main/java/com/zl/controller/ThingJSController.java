@@ -1,12 +1,10 @@
 package com.zl.controller;
 
 
-import com.zl.model.Line;
-import com.zl.model.Station;
-import com.zl.model.ThingJsUser;
-import com.zl.model.Things;
+import com.zl.model.*;
 import com.zl.service.LineService;
 import com.zl.service.ThingJSService;
+import com.zl.service.ThingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +24,9 @@ public class ThingJSController {
 
     @Autowired
     private ThingJSService thingJSService;
+
+    @Autowired
+    private ThingsService thingsService;
 
     /**
      * 线路及其所包含站点信息
@@ -119,5 +120,19 @@ public class ThingJSController {
     }
 
 
+    @RequestMapping("/test")
+    public List<ThingGroup> test(){
+        return thingsService.test();
+    }
+
+    @RequestMapping("/test2")
+    public List<Map<String, Object>> test2(){
+        return thingsService.thingGroupList();
+    }
+
+    @RequestMapping("/test3")
+    public List<Line> test3(){
+        return lineService.lineList();
+    }
 
 }

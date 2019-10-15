@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/admin")
@@ -60,9 +61,9 @@ public class AdminController {
     @RequestMapping("/thingGroup")
     public String thingGroup(Model model){
 
-        List<ThingGroup> thingGroups = thingsService.thingGroupList();
+        List<Map<String, Object>> thingGroupList = thingsService.thingGroupList();
 
-        model.addAttribute("thingGroups",thingGroups);
+        model.addAttribute("thingGroups",thingGroupList);
 
         return "admin/thing_group";
     }
@@ -105,13 +106,18 @@ public class AdminController {
         return "admin/hello";
     }
     //ThingJS展示页面
-    @RequestMapping("/reception")
-    public String reception(Model model){
+    @RequestMapping(value ="/reception")
+    public String reception(HttpServletRequest request){
 
         List<Station> stationList = sysUserService.stationList();
 
-        model.addAttribute("stationList",stationList);
+        String name = request.getParameter("name");
 
+        for(Station station :stationList){
+            if(!station.getStationName().equals(name)){
+                return "redirect:/authority-error";
+            }
+        }
         return "admin/reception";
     }
     //无权限模态框
@@ -147,8 +153,9 @@ public class AdminController {
     }
     //去设置物体分组模态框
     @RequestMapping("/toSetThingGroup")
-    public String toSetThingGroup(){
+    public String toSetThingGroup(Integer id, Model model){
 
+        model.addAttribute("id",id);
         return "modal/setThingGroupModal";
     }
 
@@ -209,6 +216,13 @@ public class AdminController {
     @RequestMapping("/AddLine")
     public Result addLine(String lineName,HttpServletResponse response){
 
+        List<Line> lineList = lineService.lineList();
+
+        for(Line line:lineList){
+            if(line.getLineName().equals(lineName)){
+                return ResultUtil.error(0,"线路已存在");
+            }
+        }
         if(lineName!=null&&lineName.length()!=0){
             lineService.addLine(lineName);
             //return "新增线路成功";
@@ -241,23 +255,44 @@ public class AdminController {
      */
     @ResponseBody
     @RequestMapping("/UpdateStation")
-    public String updateStation(int stationId,String newStationName,String newStationUrl){
-        stationService.updateStation(stationId,newStationName,newStationUrl);
+    public Result updateStation(HttpServletResponse response,int stationId,String newStationName,String newStationUrl){
 
-        return "修改站点信息成功";
+        try{
+            boolean status = stationService.updateStation(stationId,newStationName,newStationUrl);
+            if(!status){
+                return ResultUtil.error(0,"站点名称重复");
+            }else {
+                return ResultUtil.success(response.getStatus(),"修改成功");
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return ResultUtil.error(0,"服务器内部错误");
+        }
     }
     /**
      * 修改物体名称接口
      */
     @ResponseBody
     @RequestMapping("/UpdateThing")
-    public String updateThing(int id,String tname,String tposition,String tid,String tgroup,String tcamera){
-        thingsService.updateThing(id,tname,tposition,tid,tgroup,tcamera);
-        return "修改物体信息成功";
+    public Result updateThing(HttpServletResponse response,int id,String tname,String tposition,String tid,String tgroup,String tcamera){
+
+        try{
+            boolean status = thingsService.updateThing(id, tname, tposition, tid, tgroup, tcamera);
+            if(!status){
+                return ResultUtil.error(0,"物体ID重复");
+            }else {
+                return ResultUtil.success(response.getStatus(),"修改物体信息成功");
+
+            }
+        }catch (Exception e){
+            return ResultUtil.error(0,"服务器内部错误");
+        }
 
     }
 
-    /**
+    /*
      * 删除线路接口
      * @param lineName 线路名称
      */
@@ -316,8 +351,17 @@ public class AdminController {
     @RequestMapping("/AddStation")
     public Result addStation(String lineName, String stationName,String sceneUrl,HttpServletResponse response){
 
+        Line line = lineService.oneLine(lineName);
+
+        List<Station> stations = stationService.selectLineStation(line.getId());
+
+        for(Station station:stations){
+            if(station.getStationName().equals(stationName)){
+                return ResultUtil.error(0,"该站点已存在");
+            }
+        }
+
         if(stationName!=null&&stationName.length()!=0) {
-            Line line = lineService.oneLine(lineName);
             stationService.addStation(line.getId(), stationName,sceneUrl);
             return ResultUtil.success(response.getStatus(),"添加站点成功");
         }else {
@@ -327,39 +371,61 @@ public class AdminController {
 
     @ResponseBody
     @RequestMapping("/AddThing")
-    public String addThing(String tid, String tname,String tposition,String tgroup,String tcamera,Integer stationId){
+    public Result addThing(HttpServletResponse response,String tid, String tname,String tposition,String tgroup,String tcamera,Integer stationId){
 
-        Things things = new Things();
-        things.setStationId(stationId);
-        things.setTid(tid);
-        things.setTname(tname);
-        things.setTposition(tposition);
-        things.setTgroup(tgroup);
-        things.setTcamera(tcamera);
+        List<Things> thingsList = thingsService.allThing(stationId);
 
-        thingsService.addThing(things);
+        for(Things things:thingsList){
+            if(things.getTid().equals(tid)){
+                return ResultUtil.error(0,"物体ID重复");
+            }
+        }
 
-        return "新增物品成功";
+        try{
+            thingsService.addThing(tid,tname,tposition,tgroup,tcamera,stationId);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultUtil.error(0,e.getMessage());
+        }
+        return ResultUtil.success(response.getStatus(),"新增物品成功");
+
     }
 
     /**
      *新增物体分组接口
-     * @param groupName
+     * @param tg_name
      * @return
      */
     @ResponseBody
     @RequestMapping("/AddThingGroup")
-    public Result AddThingGroup(String groupName,HttpServletResponse response){
+    public Result AddThingGroup(String tg_name,HttpServletResponse response,String stationName,String lineName){
 
-        if(groupName!=null&&groupName.length()!=0){
-            thingsService.addThingGroup(groupName);
+        if(tg_name!=null&&tg_name.length()!=0){
+            thingsService.addThingGroup(tg_name,stationName,lineName);
             return ResultUtil.success(response.getStatus(),"新增分组成功");
         }else {
             return ResultUtil.error(0,"请输入分组名称");
         }
     }
     /**
-     * 展示所有线路接口(未使用)
+     *设置物体分组接口
+     * @param thingList 分组包含的物体
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/setThingGroup")
+    public Result setThingGroup(@RequestParam("thingList[]") String[] thingList,Integer groupId,HttpServletResponse response){
+
+        try{
+            thingsService.setThingGroup(thingList,groupId);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultUtil.error(0,e.getMessage());
+        }
+        return ResultUtil.success(response.getStatus(),"设置成功");
+    }
+    /**
+     * 展示所有线路接口
      */
 //    @ResponseBody
 //    @RequestMapping("/allLine")
@@ -372,7 +438,6 @@ public class AdminController {
     public Result allLine(HttpServletResponse response){
 
         return ResultUtil.success(response.getStatus(),lineService.lineList());
-
     }
 
     /**
@@ -380,13 +445,31 @@ public class AdminController {
      * @param stationId 站点ID
      */
     @ResponseBody
-    @RequestMapping("/stationThings")
-    public List<Things> stationThings(HttpServletRequest request,Integer stationId){
+    @RequestMapping("/stationThingsByStation")
+    public List<Things> stationThingsByStation(HttpServletRequest request,Integer stationId){
 
 
         int id = Integer.parseInt(request.getParameter("stationId"));
 
         return thingsService.allThing(id);
+    }
+    /**
+     * 展示站点物体接口
+     * @param groupId 分组ID
+     * @return 该分组的所有物体
+     */
+    @ResponseBody
+    @RequestMapping("/stationThingsByGroup")
+    public Result stationThingsByGroup(HttpServletResponse response,Integer groupId){
+
+        try {
+            thingsService.showThingsInGroup(groupId);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultUtil.error(0,e.getMessage());
+        }
+        return ResultUtil.success(response.getStatus(),thingsService.showThingsInGroup(groupId));
+
     }
 
     /**

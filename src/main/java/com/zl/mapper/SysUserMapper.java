@@ -4,9 +4,11 @@ import com.zl.model.SysRole;
 import com.zl.model.SysUser;
 import com.zl.model.vo.SysUserStation;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface SysUserMapper {
 
     int save(SysUser sysUser);

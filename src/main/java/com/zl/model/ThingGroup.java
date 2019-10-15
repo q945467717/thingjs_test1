@@ -1,10 +1,28 @@
 package com.zl.model;
 
-public class ThingGroup {
+import java.util.List;
 
+public class ThingGroup {
 
     private int id;
     private String tg_name;
+    private List<Things> things;
+
+    public List<Things> getThings() {
+        return things;
+    }
+
+    public void setThings(List<Things> things) {
+        this.things = things;
+    }
+
+    public String getTg_name() {
+        return tg_name;
+    }
+
+    public void setTg_name(String tg_name) {
+        this.tg_name = tg_name;
+    }
 
     public int getId() {
         return id;
@@ -14,19 +32,12 @@ public class ThingGroup {
         this.id = id;
     }
 
-    public String getGroupName() {
-        return tg_name;
-    }
-
-    public void setGroupName(String groupName) {
-        this.tg_name = groupName;
-    }
-
     @Override
     public String toString() {
         return "ThingGroup{" +
                 "id=" + id +
-                ", groupName='" + tg_name + '\'' +
+                ", tg_name='" + tg_name + '\'' +
+                ", things=" + things +
                 '}';
     }
 }

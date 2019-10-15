@@ -5,9 +5,11 @@ import com.zl.model.ThingJsUser;
 import com.zl.model.Things;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface ThingJSMapper {
 
     @Insert("insert into door(cardId,time,machineId) values(#{cardId},#{time},#{machineId})")

@@ -26,4 +26,8 @@
         </collection>
     </resultMap>
 
+    <insert id="addStation" parameterType="Station" useGeneratedKeys="true" keyProperty="stationId">
+        insert into stationinfo(stationName,lineId,sceneId) values(#{stationName},#{lineId},#{sceneId})
+    </insert>
+
 </mapper>

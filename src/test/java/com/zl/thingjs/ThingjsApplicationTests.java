@@ -1,7 +1,10 @@
 package com.zl.thingjs;
 
+import com.zl.model.Line;
+import com.zl.service.LineService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -10,13 +13,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class ThingjsApplicationTests {
 
+    @Autowired
+    private LineService lineService;
+
     @Test
     public void contextLoads() {
 
-        String password = "admin";
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(4);
-        String enPassword = encoder.encode(password);
-        System.out.println(enPassword);
+        Line line = lineService.oneLine("一号线");
+
+        System.out.println(line);
+
     }
 
 }

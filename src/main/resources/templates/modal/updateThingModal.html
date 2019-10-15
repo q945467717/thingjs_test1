@@ -44,16 +44,23 @@
             url:"/admin/UpdateThing",
             data:{'tid':tid,"tname":tname,"tposition":tposition,"tgroup":tgroup,"tcamera":tcamera,"id":id},
             type:"POST",
-            dataType:"text",
+            dataType:"json",
             success:function (data) {
-                swal({
-                    title: data,
-                    type: "success"
-                },function(){
-                    $('#updateThingModal').modal('hide');
-                    window.location.reload();
-                });
 
+                if(data.code===0){
+                    swal({
+                        title: data.msg,
+                        type: "error"
+                    });
+                }else {
+                    swal({
+                        title: data.data,
+                        type: "success"
+                    },function(){
+                        $('#updateThingModal').modal('hide');
+                        window.location.reload();
+                    });
+                }
             }
         })
     }

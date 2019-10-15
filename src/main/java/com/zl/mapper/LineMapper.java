@@ -2,9 +2,11 @@ package com.zl.mapper;
 
 import com.zl.model.Line;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface LineMapper {
 
     @Insert("insert into lineinfo(lineName) values(#{lineName})")
@@ -20,4 +22,8 @@ public interface LineMapper {
 
     @Update("update lineinfo set lineName=#{newlineName} where id=#{id}")
     void updateLine(int id,String newlineName);
+
+    @Select("select * from lineinfo where id=#{id}")
+    Line findById(Integer id);
+
 }

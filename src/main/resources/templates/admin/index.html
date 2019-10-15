@@ -59,23 +59,6 @@
     <script src="https://webapi.amap.com/subway?v=1.0&key=565f4428b3187dfafb7274ddcfa50eb8&callback=cbk"></script>
     <script>
 
-        $(document).ready(function () {
-            $.ajax({
-                // contentType: 'application/json;charset=UTF-8',
-                url:"/admin/adminStation",
-                data:{},
-                type:"POST",
-                dataType:"json",
-                success:function (data) {
-
-                }
-            })
-        });
-
-
-
-
-
         window.cbk = function(){
 
             var mySubway = subway("mySubway", {

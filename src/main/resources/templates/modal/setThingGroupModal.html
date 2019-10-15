@@ -1,19 +1,20 @@
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <div class="modal-dialog" style="width: 450px">
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title" id="myModalLabel">添加物体</h4>
         </div>
-        <div class="modal-body" style="width: 450px">
+        <div class="modal-body" style="width: 450px;height: 200px">
             <div style="width: 200px;float: right">
                 <span style="font-size: 17px">已选择物体</span>
                 <ul class="list-group" style="height: 160px;max-height: 160px;overflow-y: scroll" id="select"></ul>
             </div>
             <div style="width: 170px">
-                <span>请选择线路:</span>
-                <select class="form-control" style="margin: 5px 0" id="line"><option>请选择线路</option></select>
-                <span>请选择站点:</span>
-                <select class="form-control" style="margin: 5px 0" id="station"><option>请选择站点</option></select>
+<!--                <span>请选择线路:</span>-->
+<!--                <select class="form-control" style="margin: 5px 0" id="line"><option>请选择线路</option></select>-->
+<!--                <span>请选择站点:</span>-->
+<!--                <select class="form-control" style="margin: 5px 0" id="station"><option>请选择站点</option></select>-->
                 <span>请选择物体:</span>
                 <select class="form-control" style="margin: 5px 0" id="thing"><option>请选择物体</option></select>
             </div>
@@ -21,87 +22,104 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            <button type="button" class="btn btn-primary" onclick="setThingGroup()" >确定添加</button>
+            <button th:id="${id}" type="button" class="btn btn-primary" onclick="setThingGroup(this.id)" >确定添加</button>
         </div>
     </div>
 </div>
-
+</html>
 <script>
-    
-    
+
     $(function () {
 
         var info=[];
 
+        var groupId = [[${id}]];
+
         $.ajax({
             // contentType: 'application/json;charset=UTF-8',
-            url:"/admin/allLine",
-            data:{},
+            url:"/admin/stationThingsByGroup",
+            data:{"groupId":groupId},
             type:"POST",
             dataType:"json",
             success:function (data) {
-                info=data.data;
+                info = data.data;
                 for(var i=0;i<info.length;i++){
                     var option = document.createElement("option");
-                    $(option).text(info[i].lineName);
-                    $('#line').append(option);
+                    $(option).text(info[i].tname+"("+info[i].tid+")");
+                    $('#thing').append(option);
                 }
             }
         });
 
-        $("#line").change(function () {
-            $("#station").empty();
-            $("#thing").empty();
-            var doption = document.createElement("option");
-            $(doption).text("请选择站点");
-            $("#station").append(doption);
-            var toption = document.createElement("option");
-            $(toption).text("请选择物体");
-            $("#thing").append(toption);
+        // $.ajax({
+        //     // contentType: 'application/json;charset=UTF-8',
+        //     url:"/admin/allLine",
+        //     data:{},
+        //     type:"POST",
+        //     dataType:"json",
+        //     success:function (data) {
+        //         info=data.data;
+        //         for(var i=0;i<info.length;i++){
+        //             var option = document.createElement("option");
+        //             $(option).text(info[i].lineName);
+        //             $('#line').append(option);
+        //         }
+        //     }
+        // });
 
-            var obj = document.getElementById('line');
-            var index = obj.selectedIndex;
-            var text = obj.options[index].text;
-
-            for(var i=0;i<info.length;i++){
-                if(info[i].lineName===text){
-                    for(var j=0;j<info[i].station.length;j++){
-                        var option = document.createElement("option");
-                        $(option).text(info[i].station[j].stationName);
-                        $("#station").append(option);
-                    }
-                }
-            }
-        });
-
-        $("#station").change(function () {
-            $("#thing").empty();
-            var doption = document.createElement("option");
-            $(doption).text("请选择物体");
-            $("#thing").append(doption);
-
-            var obj = document.getElementById('station');
-            var index = obj.selectedIndex;
-            var stationtext = obj.options[index].text;
-
-            var lineobj = document.getElementById('line');
-            var lineindex = lineobj.selectedIndex;
-            var linetext = lineobj.options[lineindex].text;
-
-            for(var i=0;i<info.length;i++){
-                if(info[i].lineName===linetext){
-                    for(var j=0;j<info[i].station.length;j++){
-                        if(info[i].station[j].stationName===stationtext){
-                            for(var k=0;k<info[i].station[j].things.length;k++){
-                                var option = document.createElement("option");
-                                $(option).text(info[i].station[j].things[k].tname);
-                                $("#thing").append(option);
-                            }
-                        }
-                    }
-                }
-            }
-        });
+        // $("#line").change(function () {
+        //     $("#station").empty();
+        //     $("#thing").empty();
+        //     var doption = document.createElement("option");
+        //     $(doption).text("请选择站点");
+        //     $("#station").append(doption);
+        //     var toption = document.createElement("option");
+        //     $(toption).text("请选择物体");
+        //     $("#thing").append(toption);
+        //
+        //     var obj = document.getElementById('line');
+        //     var index = obj.selectedIndex;
+        //     var text = obj.options[index].text;
+        //
+        //     for(var i=0;i<info.length;i++){
+        //         if(info[i].lineName===text){
+        //             for(var j=0;j<info[i].station.length;j++){
+        //                 var option = document.createElement("option");
+        //                 $(option).text(info[i].station[j].stationName);
+        //                 $("#station").append(option);
+        //             }
+        //         }
+        //     }
+        // });
+        //
+        // $("#station").change(function () {
+        //     $("#thing").empty();
+        //     var doption = document.createElement("option");
+        //     $(doption).text("请选择物体");
+        //     $("#thing").append(doption);
+        //
+        //     var obj = document.getElementById('station');
+        //     var index = obj.selectedIndex;
+        //     var stationtext = obj.options[index].text;
+        //
+        //     var lineobj = document.getElementById('line');
+        //     var lineindex = lineobj.selectedIndex;
+        //     var linetext = lineobj.options[lineindex].text;
+        //
+        //     for(var i=0;i<info.length;i++){
+        //         if(info[i].lineName===linetext){
+        //             for(var j=0;j<info[i].station.length;j++){
+        //                 if(info[i].station[j].stationName===stationtext){
+        //                     for(var k=0;k<info[i].station[j].things.length;k++){
+        //                         var option = document.createElement("option");
+        //                         $(option).text(info[i].station[j].things[k].tname);
+        //                         $("#thing").append(option);
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // });
 
         $("#thing").change(function () {
             var obj = document.getElementById('thing');
@@ -126,31 +144,41 @@
 
     });
 
-    function setThingGroup() {
-        var groupName = $("#groupName").val();
-        $.ajax({
-            // contentType: 'application/json;charset=UTF-8',
-            url:"/admin/AddThingGroup",
-            data:{'groupName':groupName},
-            type:"POST",
-            dataType:"json",
-            success:function (data) {
-                if(data.code===0){
-                    swal({
-                        title: data.msg,
-                        type: "error"
-                    });
-                }else {
-                    swal({
-                        title: data.data,
-                        type: "success"
-                    },function(){
-                        $('#addThingGroupModal').modal('hide');
-                        window.location.reload();
-                    });
-                }
-            }
+    function setThingGroup(id) {
 
-        })
+        var thingList = [];
+        $("#select").find("li").each(function () {
+
+            var result = $(this).text().match(/\(([^)]*)\)/);
+
+            thingList.push(result[1])
+        });
+
+        console.log(thingList);
+
+        // $.ajax({
+        //     // contentType: 'application/json;charset=UTF-8',
+        //     url:"/admin/setThingGroup",
+        //     data:{'thingList':thingList,"groupId":id},
+        //     type:"POST",
+        //     dataType:"json",
+        //     success:function (data) {
+        //         if(data.code===0){
+        //             swal({
+        //                 title: data.msg,
+        //                 type: "error"
+        //             });
+        //         }else {
+        //             swal({
+        //                 title: data.data,
+        //                 type: "success"
+        //             },function(){
+        //                 $('#addThingGroupModal').modal('hide');
+        //                 window.location.reload();
+        //             });
+        //         }
+        //     }
+        //
+        // })
     }
 </script>

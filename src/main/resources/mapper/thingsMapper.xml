@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zl.mapper.ThingsMapper">
+    <select id="findAllGroup" resultMap="selectGroup">
+        select * from thing_group
+    </select>
+    <select id="selectThings" parameterType="integer" resultType="Things">
+        select t.id,t.tname,t.tgroup,t.tcamera,t.tid,t.tposition,t.StationId from thingsinfo t left join thing_group_relation tg on t.id = tg.thing_id where tg.group_id =#{id};
+    </select>
+    <resultMap id="selectGroup" type="ThingGroup">
+        <id property="id" column="id"/>
+        <result property="tg_name" column="tg_name"/>
+        <collection property="things" ofType="Things" select="selectThings" column="id">
+            <id property="id" column="id"/>
+            <result property="tname" column="tname"/>
+            <result property="tposition" column="tposition"/>
+            <result property="tid" column="tid"/>
+            <result property="tgroup" column="tgroup"/>
+            <result property="StationId" column="StationId"/>
+            <result property="tcamera" column="tcamera"/>
+        </collection>
+    </resultMap>
+
+    <insert id="addGroup" parameterType="ThingGroup" useGeneratedKeys="true" keyProperty="id">
+        insert into thing_group(tg_name) value (#{tg_name})
+    </insert>
+
+</mapper>

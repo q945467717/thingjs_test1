@@ -34,7 +34,6 @@
         var tgroup = obj.options[index].text;
         var tname = $("#Name").val();
         var tposition = $("#Position").val();
-       // var tgroup = $("#Group").val();
         var tcamera = $("#Camera").val();
 
         $.ajax({
@@ -42,15 +41,24 @@
             url:"/admin/AddThing",
             data:{'tid':tid,'tname':tname,'tposition':tposition,'tgroup':tgroup,'tcamera':tcamera,'stationId':id},
             type:"POST",
-            dataType:"text",
+            dataType:"json",
             success:function (data) {
-                swal({
-                    title: data,
-                    type: "success"
-                },function(){
-                    $('#addThingModal').modal('hide');
-                    window.location.reload();
-                });
+
+                if(data.code===0){
+                    swal({
+                        title: data.msg,
+                        type: "error"
+                    });
+                }else {
+                    swal({
+                        title: data.data,
+                        type: "success"
+                    },function(){
+                        $('#addThingModal').modal('hide');
+                        window.location.reload();
+                    });
+                }
+
             }
         })
     }

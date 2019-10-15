@@ -27,17 +27,23 @@
             url:"/admin/UpdateStation",
             data:{'stationId':id,"newStationName":newStationName,"newStationUrl":newStationUrl},
             type:"POST",
-            dataType:"text",
+            dataType:"json",
             success:function (data) {
-                swal({
-                    title: data,
-                    type: "success"
-                },function(){
-                    $('#updateStationModal').modal('hide');
-                    window.location.reload();
-                });
 
-
+                if(data.code===0){
+                    swal({
+                        title: data.msg,
+                        type: "error"
+                    });
+                }else {
+                    swal({
+                        title: data.data,
+                        type: "success"
+                    },function(){
+                        $('#updateStationModal').modal('hide');
+                        window.location.reload();
+                    });
+                }
             }
         })
     }

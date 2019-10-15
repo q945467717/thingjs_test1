@@ -208,14 +208,13 @@ public class SysUserServiceImpl implements SysUserService{
 
         List<SysUserStation> sysUserStations = sysUserMapper.adminStations(sysUser.getId());
 
-                for(SysUserStation sysUserStation:sysUserStations){
+        for(SysUserStation sysUserStation:sysUserStations){
 
-                    Station station = stationMapper.oneStation(sysUserStation.getStation_id());
-                    stationList.add(station);
-                }
+            Station station = stationMapper.oneStation(sysUserStation.getStation_id());
+            stationList.add(station);
+        }
 
         return stationList;
-
 
     }
 

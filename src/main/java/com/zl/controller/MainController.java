@@ -29,9 +29,9 @@ public class MainController {
     }
 
     @ResponseBody
-    @RequestMapping("/login-error")
+    @RequestMapping("/authority-error")
     public String loginError(){
-        return "error";
+        return "权限不足";
     }
 
     @RequestMapping("/thingJStest")

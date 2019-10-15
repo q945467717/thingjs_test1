@@ -4,7 +4,11 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title" id="myModalLabel">新建分组</h4>
         </div>
-        <div class="modal-body" style="width: 300px">请输入分组名称：<input type="text" id="groupName" /></div>
+        <div class="modal-body" style="width: 300px">请输入分组名称：<input type="text" id="groupName" /><br>
+        请选择所属站点<br><select class="form-control" style="margin: 5px 0;width: 170px" id="line"><option>请选择线路</option></select>
+            <select class="form-control" style="margin: 5px 0;width: 170px" id="station"><option>请选择站点</option></select>
+        </div>
+
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             <button type="button" class="btn btn-primary" onclick="addThingGroup()" >确定新增</button>
@@ -13,12 +17,66 @@
 </div>
 
 <script>
+
+    $(function () {
+
+        var info=[];
+
+        $.ajax({
+            // contentType: 'application/json;charset=UTF-8',
+            url:"/admin/allLine",
+            data:{},
+            type:"POST",
+            dataType:"json",
+            success:function (data) {
+                info=data.data;
+                for(var i=0;i<info.length;i++){
+                    var option = document.createElement("option");
+                    $(option).text(info[i].lineName);
+                    $('#line').append(option);
+                }
+            }
+        });
+
+        $("#line").change(function () {
+            $("#station").empty();
+            var doption = document.createElement("option");
+            $(doption).text("请选择站点");
+            $("#station").append(doption);
+
+            var obj = document.getElementById('line');
+            var index = obj.selectedIndex;
+            var text = obj.options[index].text;
+
+            for(var i=0;i<info.length;i++){
+                if(info[i].lineName===text){
+                    for(var j=0;j<info[i].station.length;j++){
+                        var option = document.createElement("option");
+                        $(option).text(info[i].station[j].stationName);
+                        $("#station").append(option);
+                    }
+                }
+            }
+        });
+
+    });
+
     function addThingGroup() {
         var groupName = $("#groupName").val();
+
+        var sobj = document.getElementById('station');
+        var sindex = sobj.selectedIndex;
+        var stationName = sobj.options[sindex].text;
+
+        var lobj = document.getElementById("line");
+        var lindex = lobj.selectedIndex;
+        var lineName = lobj.options[lindex].text;
+
+
         $.ajax({
             // contentType: 'application/json;charset=UTF-8',
             url:"/admin/AddThingGroup",
-            data:{'groupName':groupName},
+            data:{'tg_name':groupName,'stationName':stationName,"lineName":lineName},
             type:"POST",
             dataType:"json",
             success:function (data) {

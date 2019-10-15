@@ -4,20 +4,27 @@ import com.zl.model.ThingGroup;
 import com.zl.model.Things;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ThingsService {
 
     List<Things> allThing(int stationId);
 
-    void addThing(Things things);
+    void addThing(String tid, String tname,String tposition,String tgroup,String tcamera,Integer stationId);
 
     void deleteThing(Integer id);
 
-    void updateThing(int id,String tname,String tposition,String tid,String tgroup,String tcamera);
+    boolean updateThing(int id,String tname,String tposition,String tid,String tgroup,String tcamera);
 
     Things oneThing(Integer id);
 
-    void addThingGroup(String groupName);
+    void addThingGroup(String tg_name,String stationName,String lineName);
 
-    List<ThingGroup> thingGroupList();
+    List<Map<String, Object>> thingGroupList();
+
+    void setThingGroup(String[] thingList,Integer groupId);
+
+    List<ThingGroup> test();
+
+    List<Things> showThingsInGroup(Integer groupId);
 }
