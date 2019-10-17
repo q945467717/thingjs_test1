@@ -21,8 +21,6 @@ public class ThingsServiceImpl implements ThingsService {
     private ThingsMapper thingsMapper;
     @Autowired
     private StationMapper stationMapper;
-    @Autowired
-    private LineMapper lineMapper;
 
     @Override
     public List<Things> allThing(int stationId) {
@@ -103,7 +101,7 @@ public class ThingsServiceImpl implements ThingsService {
     }
 
     @Override
-    public void addThingGroup(String tg_name,String stationName,String lineName) {
+    public void addThingGroup(String tg_name,String stationName) {
 
         ThingGroup thingGroup = new ThingGroup();
 
@@ -111,18 +109,16 @@ public class ThingsServiceImpl implements ThingsService {
 
         int group_id = thingsMapper.addGroup(thingGroup);
 
-        Line line = lineMapper.oneLine(lineName);
+        List<Station> stationList = stationMapper.findStationListByName(stationName);
 
-        Station station = stationMapper.findByNameAndLineId(stationName,line.getId());
+        for(Station station:stationList){
+            stationMapper.addStationGroupRelation(station.getStationId(),thingGroup.getId());
 
-
-        stationMapper.addStationGroupRelation(station.getStationId(),thingGroup.getId());
-
+        }
     }
 
     @Override
     public List<Map<String, Object>> thingGroupList() {
-
 
         List<ThingGroup> thingGroups = thingsMapper.thingGroupList();
 
@@ -133,8 +129,9 @@ public class ThingsServiceImpl implements ThingsService {
             Map<String,Object> map = new HashMap<>();
 
             map.put("groupName",thingGroup.getTg_name());
-            StationGroupRelation stationGroupRelation = stationMapper.findStationGroupRelation(thingGroup.getId());
-            Station station = stationMapper.oneStation(stationGroupRelation.getStation_id());
+            List<StationGroupRelation> stationGroupRelation = stationMapper.findStationGroupRelationList(thingGroup.getId());
+
+            Station station = stationMapper.oneStation(stationGroupRelation.get(0).getStation_id());
             map.put("stationName",station.getStationName());
             String id =Integer.toString(thingGroup.getId());
 
@@ -155,14 +152,26 @@ public class ThingsServiceImpl implements ThingsService {
     @Override
     public void setThingGroup(String[] thingList,Integer groupId) {
 
-        for(String tname:thingList){
-            Things thing = thingsMapper.findThingByName(tname);
+        StationGroupRelation stationGroupRelation = stationMapper.findStationGroupRelation(groupId);
 
+        Station station = stationMapper.oneStation(stationGroupRelation.getStation_id());
 
+        List<Station> stationList = stationMapper.findStationListByName(station.getStationName());
 
+        for(String tid:thingList){
 
-            thingsMapper.thingGroupRelation(thing.getId(),groupId);
+            for(Station station1:stationList){
 
+                List<Things> thingsList = thingsMapper.allThing(station1.getStationId());
+
+                for(Things things:thingsList){
+                    if(things.getTid().equals(tid)){
+
+                        thingsMapper.thingGroupRelation(things.getId(),groupId);
+
+                    }
+                }
+            }
         }
     }
 

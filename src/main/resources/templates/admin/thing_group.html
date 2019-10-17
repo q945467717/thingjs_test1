@@ -20,8 +20,9 @@
                         <a data-toggle="collapse" data-parent="#accordion" th:href="'#r'+${iterStat.index}">
                             <span th:text="${thingGroup.groupName}"></span><span th:text="'(所属站点:'+${thingGroup.stationName}+')'"></span>
                             <span style="margin-left: 70%;display: inline">
-                                <a th:id="${thingGroup.id}" data-toggle="modal" data-target="#setThingGroupModal" class="btn btn-sm btn-success" onclick="openModal('/admin/toSetThingGroup','setThingGroupModal',this.id)" th:text="添加物体"></a>
-                                <a th:id="${thingGroup.id}" data-toggle="modal" data-target="#updateStationModal" class="btn btn-sm btn-warning" onclick="openModal('/admin/toUpdateStation','updateStationModal',this.id)">修改名称</a>
+                                <a th:id="${thingGroup.id}" data-toggle="modal" data-target="#setThingGroupModal" class="btn btn-sm btn-success" onclick="openModal('/admin/toSetThingGroup','setThingGroupModal',this.id)">添加物体</a>
+                                <a th:id="${thingGroup.id}" data-toggle="modal" data-target="#updateStationModal" class="btn btn-sm btn-warning" onclick="openModal('/admin/toUpdateStation','updateStationModal',this.id)">修改</a>
+                                <a th:id="${thingGroup.id}" data-toggle="modal" data-target="#updateStationModal" class="btn btn-sm btn-danger" onclick="openModal('/admin/toUpdateStation','updateStationModal',this.id)">删除分组</a>
                             </span>
                         </a>
                     </h4>
@@ -44,6 +45,7 @@
                             <td style="text-align: center" th:text="${thing.tposition}">tposition</td>
                             <td style="text-align: center" th:text="${thing.tgroup}">tgroup</td>
                             <td style="text-align: center" th:text="${thing.tcamera}">tcamera</td>
+
                         </tr>
                         </tbody>
                     </table>

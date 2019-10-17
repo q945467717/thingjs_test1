@@ -156,29 +156,29 @@
 
         console.log(thingList);
 
-        // $.ajax({
-        //     // contentType: 'application/json;charset=UTF-8',
-        //     url:"/admin/setThingGroup",
-        //     data:{'thingList':thingList,"groupId":id},
-        //     type:"POST",
-        //     dataType:"json",
-        //     success:function (data) {
-        //         if(data.code===0){
-        //             swal({
-        //                 title: data.msg,
-        //                 type: "error"
-        //             });
-        //         }else {
-        //             swal({
-        //                 title: data.data,
-        //                 type: "success"
-        //             },function(){
-        //                 $('#addThingGroupModal').modal('hide');
-        //                 window.location.reload();
-        //             });
-        //         }
-        //     }
-        //
-        // })
+        $.ajax({
+            // contentType: 'application/json;charset=UTF-8',
+            url:"/admin/setThingGroup",
+            data:{'thingList':thingList,"groupId":id},
+            type:"POST",
+            dataType:"json",
+            success:function (data) {
+                if(data.code===0){
+                    swal({
+                        title: data.msg,
+                        type: "error"
+                    });
+                }else {
+                    swal({
+                        title: data.data,
+                        type: "success"
+                    },function(){
+                        $('#addThingGroupModal').modal('hide');
+                        window.location.reload();
+                    });
+                }
+            }
+
+        })
     }
 </script>

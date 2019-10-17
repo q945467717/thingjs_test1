@@ -68,15 +68,10 @@
         var sindex = sobj.selectedIndex;
         var stationName = sobj.options[sindex].text;
 
-        var lobj = document.getElementById("line");
-        var lindex = lobj.selectedIndex;
-        var lineName = lobj.options[lindex].text;
-
-
         $.ajax({
             // contentType: 'application/json;charset=UTF-8',
             url:"/admin/AddThingGroup",
-            data:{'tg_name':groupName,'stationName':stationName,"lineName":lineName},
+            data:{'tg_name':groupName,'stationName':stationName},
             type:"POST",
             dataType:"json",
             success:function (data) {

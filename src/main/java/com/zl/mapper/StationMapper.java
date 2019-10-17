@@ -39,6 +39,9 @@ public interface StationMapper {
     void addStationGroupRelation(Integer station_id,Integer group_id);
 
     @Select("select * from station_group_relation where group_id=#{group_id}")
+    List<StationGroupRelation> findStationGroupRelationList(Integer group_id);
+
+    @Select("select * from station_group_relation where group_id=#{group_id}")
     StationGroupRelation findStationGroupRelation(Integer group_id);
 
     @Select("select * from stationinfo where stationName = '${stationName}' and lineId=#{lineId}")

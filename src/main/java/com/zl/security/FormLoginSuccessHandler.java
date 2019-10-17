@@ -1,14 +1,12 @@
 package com.zl.security;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Set;
 
 /**
  * 登陆成功后的处理
@@ -27,11 +25,13 @@ public class FormLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandl
 //            response.sendRedirect("/user/index");
 //        }
         //if(roles.contains("ROLE_USER")){
-            response.sendRedirect("admin/index");
-       // }else {
-            //response.sendRedirect("/admin/index");
+        response.sendRedirect("admin/index");
+        // }else {
+        //response.sendRedirect("/admin/index");
         //}
 
-       // super.onAuthenticationSuccess(request, response, authentication);
+        // super.onAuthenticationSuccess(request, response, authentication);
+
     }
+
 }

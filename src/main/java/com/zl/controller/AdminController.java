@@ -398,10 +398,10 @@ public class AdminController {
      */
     @ResponseBody
     @RequestMapping("/AddThingGroup")
-    public Result AddThingGroup(String tg_name,HttpServletResponse response,String stationName,String lineName){
+    public Result AddThingGroup(String tg_name,HttpServletResponse response,String stationName){
 
         if(tg_name!=null&&tg_name.length()!=0){
-            thingsService.addThingGroup(tg_name,stationName,lineName);
+            thingsService.addThingGroup(tg_name,stationName);
             return ResultUtil.success(response.getStatus(),"新增分组成功");
         }else {
             return ResultUtil.error(0,"请输入分组名称");
@@ -416,8 +416,10 @@ public class AdminController {
     @RequestMapping("/setThingGroup")
     public Result setThingGroup(@RequestParam("thingList[]") String[] thingList,Integer groupId,HttpServletResponse response){
 
+
         try{
             thingsService.setThingGroup(thingList,groupId);
+            //System.out.println(thingList[0]);
         }catch (Exception e){
             e.printStackTrace();
             return ResultUtil.error(0,e.getMessage());

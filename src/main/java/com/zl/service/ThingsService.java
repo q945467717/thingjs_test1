@@ -18,7 +18,7 @@ public interface ThingsService {
 
     Things oneThing(Integer id);
 
-    void addThingGroup(String tg_name,String stationName,String lineName);
+    void addThingGroup(String tg_name,String stationName);
 
     List<Map<String, Object>> thingGroupList();
 
