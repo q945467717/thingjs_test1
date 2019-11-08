@@ -53,6 +53,9 @@ public interface ThingsMapper {
     @Select("select * from thing_group_relation where group_id=#{groupId}")
     List<ThingGroupRelation> findRelationByGroupId(Integer groupId);
 
+    @Select("select count(*) from thingsinfo where tid=#{tid} and StationId=#{stationId}")
+    int count(String tid,String stationId);
+
 
 
 }

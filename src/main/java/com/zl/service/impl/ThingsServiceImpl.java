@@ -1,12 +1,10 @@
 package com.zl.service.impl;
 
-import com.zl.mapper.LineMapper;
 import com.zl.mapper.StationMapper;
 import com.zl.mapper.ThingsMapper;
 import com.zl.model.*;
 import com.zl.service.ThingsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.server.csrf.CsrfServerLogoutHandler;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -120,7 +118,7 @@ public class ThingsServiceImpl implements ThingsService {
     @Override
     public List<Map<String, Object>> thingGroupList() {
 
-        List<ThingGroup> thingGroups = thingsMapper.thingGroupList();
+        List<ThingGroup> thingGroups = thingsMapper.findAllGroup();
 
         List<Map<String, Object>> thingGroupList = new ArrayList<>();
 
@@ -137,9 +135,11 @@ public class ThingsServiceImpl implements ThingsService {
 
             map.put("id",id);
 
-            List<Things> things = thingGroup.getThings();
+            List<Things> thingsList = thingsMapper.allThing(station.getStationId());
 
-            map.put("things",things);
+           // List<Things> things = thingGroup.getThings();
+
+            map.put("things",thingsList);
 
             thingGroupList.add(map);
 
@@ -152,27 +152,42 @@ public class ThingsServiceImpl implements ThingsService {
     @Override
     public void setThingGroup(String[] thingList,Integer groupId) {
 
-        StationGroupRelation stationGroupRelation = stationMapper.findStationGroupRelation(groupId);
+        List<StationGroupRelation> stationGroupRelationList = stationMapper.findStationGroupRelationList(groupId);
 
-        Station station = stationMapper.oneStation(stationGroupRelation.getStation_id());
+        for(StationGroupRelation stationGroupRelation:stationGroupRelationList){
+            List<Things> thingsList = thingsMapper.allThing(stationGroupRelation.getStation_id());
 
-        List<Station> stationList = stationMapper.findStationListByName(station.getStationName());
-
-        for(String tid:thingList){
-
-            for(Station station1:stationList){
-
-                List<Things> thingsList = thingsMapper.allThing(station1.getStationId());
-
-                for(Things things:thingsList){
+            for (Things things:thingsList){
+                for(String tid:thingList){
                     if(things.getTid().equals(tid)){
-
                         thingsMapper.thingGroupRelation(things.getId(),groupId);
-
                     }
                 }
+
             }
+
         }
+
+
+//        Station station = stationMapper.oneStation(stationGroupRelation.getStation_id());
+//
+//        List<Station> stationList = stationMapper.findStationListByName(station.getStationName());
+//
+//        for(String tid:thingList){
+//
+//            for(Station station1:stationList){
+//
+//                List<Things> thingsList = thingsMapper.allThing(station1.getStationId());
+//
+//                for(Things things:thingsList){
+//                    if(things.getTid().equals(tid)){
+//
+//                        thingsMapper.thingGroupRelation(things.getId(),groupId);
+//
+//                    }
+//                }
+//            }
+//        }
     }
 
     @Override
@@ -185,9 +200,9 @@ public class ThingsServiceImpl implements ThingsService {
     @Override
     public List<Things> showThingsInGroup(Integer groupId) {
 
-        StationGroupRelation stationGroupRelation = stationMapper.findStationGroupRelation(groupId);
+        List<StationGroupRelation> stationGroupRelationList = stationMapper.findStationGroupRelationList(groupId);
 
-        return thingsMapper.allThing(stationGroupRelation.getStation_id());
+        return thingsMapper.allThing(stationGroupRelationList.get(0).getStation_id());
 
 
     }

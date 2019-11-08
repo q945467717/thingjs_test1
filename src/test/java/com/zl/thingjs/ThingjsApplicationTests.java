@@ -13,16 +13,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class ThingjsApplicationTests {
 
-    @Autowired
-    private LineService lineService;
-
-    @Test
-    public void contextLoads() {
-
-        Line line = lineService.oneLine("一号线");
-
-        System.out.println(line);
-
-    }
+//    @Autowired
+//    private LineService lineService;
+//
+//    @Test
+//    public void contextLoads() {
+//
+//        Line line = lineService.oneLine("一号线");
+//
+//        System.out.println(line);
+//
+//    }
 
 }
